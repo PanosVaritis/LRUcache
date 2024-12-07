@@ -28,13 +28,13 @@ public interface ListInterface<K,V> {
      * Removes the last node of the list, 
      * and connects with the rest
      */
-    void removeLast();
+    Node<K,V> removeLast();
     
     /**
      * Not necessary for the app we make
      * It removes the first node of the list, and connects with the rest
      */
-    void removeFirst();
+    Node<K,V> removeFirst();
     
     /**
      * 
@@ -49,16 +49,16 @@ public interface ListInterface<K,V> {
     void clear();
     
     /**
-     * When called it return the data of the first node of the list, without erasing him
+     * When called it return the first node of the list (The reference of the node)
      * @return Entry<K,V>
      */
-    Entry<K,V> getFirst();
+    Node<K,V> getFirst();
     
     /**
-     * When called it returns the data of the last node of the list, without erasing him
+     * When called it returns the the last node of the list (The reference of the node)
      * @return Entry<K,V>
      */
-    Entry<K,V> getLast();
+    Node<K,V> getLast();
     
     
     /** 
@@ -71,4 +71,10 @@ public interface ListInterface<K,V> {
      * Used for debugging purposes. It print's the list forward
      */
     void displayForward();
+    
+    
+    /**
+     * 
+     */
+    void moveToTop(Node<K,V> node);
 }

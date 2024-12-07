@@ -36,8 +36,8 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
             this.head = newNode;
             this.tail = newNode;
         }else {
-            newNode.next = head;
-            head.prev = newNode;
+            newNode.setNext(head);
+            head.setPrev(newNode);
             head = newNode;
         }
         this.size++;
@@ -53,45 +53,51 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
             this.head = newNode;
             this.tail = newNode;
         }else {
-            newNode.prev = tail;
-            tail.next = newNode;
-            this.tail = newNode;
+            newNode.setPrev(tail);
+            tail.setNext(newNode);
+            tail = newNode;
         }
         this.size++;
     }
 
     @Override
-    public void removeLast() {
+    public Node<K,V> removeLast() {
         if(isEmpty())
             throw new NoSuchElementException ("The list is empty. Cannot remove from an empty list...");
         
+        //must be carefful of the null pointer exception 
+        Node<K,V> tempo = tail;
+
         if (head == tail){
             this.head = null;
             this.tail = null;
         }else {
-            Node<K,V> tempo = tail;
-            tail = tempo.prev;
-            tail.next = null;
-            tempo.prev = null;
+            tail = tempo.getPrev();
+            tail.setNext(null);
+            tempo.setPrev(null);
         }
         this.size--;
+        return tempo;
     }
 
     @Override
-    public void removeFirst() {
+    public Node<K,V> removeFirst() {
         if (isEmpty())
             throw new NoSuchElementException("The list is empty. Cannot remove from an empty list...");
     
+        //Must be carefful with the null pointer exception
+        Node<K,V> tempo = head;
+            
         if (head == tail){
             this.head = null;
             this.tail = null;
         }else {
-            Node<K,V> tempo = head;
-            head = tempo.next;
-            head.prev = null;
-            tempo.next = null;
+            head = tempo.getNext();
+            head.setPrev(null);
+            tempo.setNext(null);
         }
         this.size--;
+        return tempo;
     }
 
     @Override
@@ -108,23 +114,23 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
     
     
     @Override
-    public Entry<K,V> getFirst(){
+    public Node<K,V> getFirst(){
         if (isEmpty())
             throw new NoSuchElementException ("Nothing to return!! The list is empty...");
     
-        return head.newEntry;
-    
+        return head;
+
     }
     
     @Override 
-    public Entry<K,V> getLast(){
+    public Node<K,V> getLast(){
         if (isEmpty())
             throw new NoSuchElementException ("Nothing to return!!! The list is empty...");
         
         if (size == 1)
-            return head.newEntry;
+            return head;
             
-        return tail.newEntry;
+        return tail;
     }
     
     @Override 
@@ -143,35 +149,17 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
         Node<K,V> tempo = head;
         
         while (tempo != null){
-            System.out.print (tempo.newEntry.getValue() +" <--> ");
-            tempo = tempo.next;
+            System.out.print (tempo.getNewEntry().getValue() +" <--> ");
+            tempo = tempo.getNext();
         }
         System.out.println("\n");
     
     }
     
-    
-    /**
-     * Inner class that represents the nodes. Since we make it static, it cannot access non static fields from the 
-     * outside class and must declare the T specifically
-     * @param <T> 
-     */
-    private static class Node<K,V>{
+    @Override
+    public void moveToTop (Node<K,V> node){
         
-        public Entry<K,V> newEntry;
-        
-        public Node<K,V> next;
-        
-        public Node<K,V> prev;
-
-        public Node (K key, V value){
-            
-            newEntry = new Entry<>(key, value);
-            this.next = null;
-            this.prev = null;
-            
-        }
     }
-    
+
     
 }

@@ -1,6 +1,8 @@
 
 package org.hua.cache;
 
+import java.util.HashMap;
+
 
 /**
  * This is the cache implementation
@@ -15,30 +17,71 @@ public class LRUCache<K,V> implements Cache<K,V>{
      * Specifically we will have a Hash Interface variable and a List interface variable that will be initialized from their constructors
      * @param totalSize 
      */
+
+    private ListInterface<K,V> list;
     
-    private int size;
+    private HashMap<K,Node<K,V>> map;
+     
+    private int actualSize;
     
-    public LRUCache (int size){
-        if (size <= 0)
+    private int totalSize;
+    
+    public LRUCache (int totalSize){
+        
+        if (totalSize <= 0)
             throw new IllegalArgumentException ("The size of the cache cannot be negative!!!");
     
-        this.size = size;
-    
-        /**
-         * Creation of the doubly list and of the hash map with their constructors
-         */
-    
+        this.totalSize = totalSize;
+        
+        this.actualSize = 0;
+        
+        this.list = new DoublyList<>();
+        
+        this.map = new HashMap();
     }
     
 
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        if (!map.containsKey(key))
+            return null;
+        
+        Node<K,V> node = map.get(key);
+        
+        list.moveToTop(node);
+        
+        return node.getNewEntry().getValue();
     }
 
+    
+    
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        if (map.containsKey(key)){
+            
+            Node<K,V> node = map.get(key);
+            
+            node.getNewEntry().setValue(value);
+            
+            list.moveToTop(node);
+            
+            return;
+        }
+        
+        if (actualSize >= totalSize){
+            
+            Node<K,V> node = list.removeLast();
+            map.remove(node.getNewEntry().getKey());
+            actualSize--;
+        }
+        
+        
+        list.addFirst(key, value);
+        Node<K,V> newNode = list.getFirst();
+        map.put(key, newNode);
+        actualSize++;
     }
     
 }
