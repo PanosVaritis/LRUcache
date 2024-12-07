@@ -1,18 +1,33 @@
 
 package org.hua.cache;
 
+
 /**
- *
+ * This is the cache implementation
  * @author panos
  * @param <K>
- * @param <>V
+ * @param <V>
  */
 public class LRUCache<K,V> implements Cache<K,V>{
     
-    private static final int TOTAL_AVAILABLE_SIZE = 60;
+    /**
+     * We will be talking with the interfaces and not the interface implementations
+     * Specifically we will have a Hash Interface variable and a List interface variable that will be initialized from their constructors
+     * @param totalSize 
+     */
     
-    public LRUCache (){
-        
+    private int size;
+    
+    public LRUCache (int size){
+        if (size <= 0)
+            throw new IllegalArgumentException ("The size of the cache cannot be negative!!!");
+    
+        this.size = size;
+    
+        /**
+         * Creation of the doubly list and of the hash map with their constructors
+         */
+    
     }
     
 
@@ -22,7 +37,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
     }
 
     @Override
-    public V put(K key, V value) {
+    public void put(K key, V value) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

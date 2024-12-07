@@ -13,7 +13,7 @@ public interface Cache <K, V>{
     
     /**
      * Get the value for a key. Returns null if the key is not in the cache
-     * 
+     * @return the value of the key
      * @param key the key
      */
     V get(K key);
@@ -25,5 +25,5 @@ public interface Cache <K, V>{
      * @param value the value
      *
      */
-    V put (K key, V value);
+    void put (K key, V value);
 }

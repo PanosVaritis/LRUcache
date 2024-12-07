@@ -1,5 +1,6 @@
 
 package org.hua.cache;
+import java.util.Scanner;
 
 /**
  *
@@ -47,5 +48,16 @@ public class App {
         
     
        
+        
+        /**
+         * Bellow the actual program will be executed!!!
+         */
+//        Scanner input = new Scanner (System.in);
+//        int cacheSize;
+//        System.out.print ("Provide the size of the cache: ");
+//        cacheSize = input.nextInt();
+//        Cache<Integer, String> myCache = new LRUCache(cacheSize);
+        
+        
     }
 }
