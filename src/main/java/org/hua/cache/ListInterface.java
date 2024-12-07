@@ -5,21 +5,24 @@ package org.hua.cache;
  * This is an interface with all the methods that a 
  * doubly linked list must have
  * @author panos
- * @param <T>
+ * @param <K>
+ * @param <V>
  */
-public interface ListInterface<T> {
+public interface ListInterface<K,V> {
   
     /**
      * Adds a node and it's payload in the start of the list
-     * @param data 
+     * @param key
+     * @param value
      */
-    void addFirst(T data);
+    void addFirst(K key, V value);
     
     /**
      * Adds a node and it's payload in the end of the list
-     * @param data 
+     * @param key
+     * @param value
      */
-    void addLast (T data);
+    void addLast (K key, V value);
     
     /**
      * Removes the last node of the list, 
@@ -47,15 +50,15 @@ public interface ListInterface<T> {
     
     /**
      * When called it return the data of the first node of the list, without erasing him
-     * @return 
+     * @return Entry<K,V>
      */
-    T getFirst();
+    Entry<K,V> getFirst();
     
     /**
      * When called it returns the data of the last node of the list, without erasing him
-     * @return 
+     * @return Entry<K,V>
      */
-    T getLast();
+    Entry<K,V> getLast();
     
     
     /** 

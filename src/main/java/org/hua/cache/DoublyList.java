@@ -4,16 +4,20 @@ package org.hua.cache;
 import java.util.NoSuchElementException;
 
 /**
- * @param <T>
+ * @param <K>
+ * @param <V>
  * An implementation of the ListInterface
  * This class represents a doubly linked list
  * @author panos
  */
 
-public class DoublyList<T> implements ListInterface<T> {
+public class DoublyList<K,V> implements ListInterface<K,V> {
 
-    private Node<T> head;
-    private Node<T> tail;
+    
+    private Node<K,V> head;
+    
+    private Node<K,V> tail;
+    
     private int size;
     
     public DoublyList(){
@@ -23,9 +27,10 @@ public class DoublyList<T> implements ListInterface<T> {
     }
     
     @Override
-    public void addFirst(T data) {
+    public void addFirst(K key, V value) {
         
-        Node<T> newNode = new Node(data);
+        Node<K,V> newNode = new Node(key, value);
+        
         
         if (isEmpty()){
             this.head = newNode;
@@ -39,9 +44,10 @@ public class DoublyList<T> implements ListInterface<T> {
     }
 
     @Override
-    public void addLast(T data) {
+    public void addLast(K key, V value) {
         
-        Node<T> newNode = new Node(data);
+        
+        Node<K,V> newNode = new Node(key, value);
         
         if (isEmpty()){
             this.head = newNode;
@@ -63,7 +69,7 @@ public class DoublyList<T> implements ListInterface<T> {
             this.head = null;
             this.tail = null;
         }else {
-            Node<T> tempo = tail;
+            Node<K,V> tempo = tail;
             tail = tempo.prev;
             tail.next = null;
             tempo.prev = null;
@@ -80,7 +86,7 @@ public class DoublyList<T> implements ListInterface<T> {
             this.head = null;
             this.tail = null;
         }else {
-            Node<T> tempo = head;
+            Node<K,V> tempo = head;
             head = tempo.next;
             head.prev = null;
             tempo.next = null;
@@ -102,23 +108,23 @@ public class DoublyList<T> implements ListInterface<T> {
     
     
     @Override
-    public T getFirst(){
+    public Entry<K,V> getFirst(){
         if (isEmpty())
             throw new NoSuchElementException ("Nothing to return!! The list is empty...");
     
-        return head.data;
+        return head.newEntry;
     
     }
     
     @Override 
-    public T getLast(){
+    public Entry<K,V> getLast(){
         if (isEmpty())
             throw new NoSuchElementException ("Nothing to return!!! The list is empty...");
         
         if (size == 1)
-            return head.data;
+            return head.newEntry;
             
-        return tail.data;
+        return tail.newEntry;
     }
     
     @Override 
@@ -134,10 +140,10 @@ public class DoublyList<T> implements ListInterface<T> {
             throw new NoSuchElementException ("Nothing to print. The list is empty....");
         }
         
-        Node<T> tempo = head;
+        Node<K,V> tempo = head;
         
         while (tempo != null){
-            System.out.print (tempo.data +" <--> ");
+            System.out.print (tempo.newEntry.getValue() +" <--> ");
             tempo = tempo.next;
         }
         System.out.println("\n");
@@ -150,16 +156,20 @@ public class DoublyList<T> implements ListInterface<T> {
      * outside class and must declare the T specifically
      * @param <T> 
      */
-    private static class Node<T>{
+    private static class Node<K,V>{
         
-        public T data;
-        public Node<T> next;
-        public Node<T> prev;
+        public Entry<K,V> newEntry;
         
-        public Node (T data){
-            this.data = data;
+        public Node<K,V> next;
+        
+        public Node<K,V> prev;
+
+        public Node (K key, V value){
+            
+            newEntry = new Entry<>(key, value);
             this.next = null;
             this.prev = null;
+            
         }
     }
     

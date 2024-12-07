@@ -4,6 +4,8 @@ package org.hua.cache;
 /**
  * This class is used to represent a key value pair
  * @author panos
+ * @param <K>
+ * @param <V>
  */
 public class Entry <K,V>{
 
