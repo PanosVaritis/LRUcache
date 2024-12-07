@@ -1,6 +1,7 @@
 
 package org.hua.cache;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -158,8 +159,63 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
     
     @Override
     public void moveToTop (Node<K,V> node){
+        removeNodeFromPosition(node);
+        addNodeToStart(node);
         
     }
 
+    private void addNodeToStart(Node<K,V> node){
+    
+        
+        if (isEmpty()){
+            this.head = node;
+            this.tail = node;
+        }else {
+            node.setPrev(tail);
+            tail.setNext(node);
+            tail = node;
+        }
+    }
+    
+    private void removeNodeFromPosition(Node<K,V> node){
+        Node<K,V> tempo = node.getPrev().getNext();
+        tempo.setNext(node.getNext());
+        
+        Node<K,V> tempo1 = node.getNext().getPrev();
+        tempo1.setPrev(node.getPrev());
+        
+        
+        node.setNext(null);
+        node.setPrev(null);
+    
+    }
+    
+    @Override 
+    public Iterator<Node<K,V>> iterator(){
+        return new ListIterator();
+    }
+    
+    
+     private class ListIterator implements Iterator<Node<K,V>>{
+         
+         private Node<K,V> it = head.getNext();
+        
+        @Override
+        public boolean hasNext() {
+            return it != tail;
+            
+        }
+
+        @Override
+        public Node<K,V> next() {
+            if (!hasNext())
+                throw new NoSuchElementException();
+            
+            Node<K,V> node = it;
+            it = it.getNext();
+            return node;
+        }
+        
+    }
     
 }

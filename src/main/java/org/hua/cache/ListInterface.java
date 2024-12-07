@@ -1,6 +1,8 @@
 
 package org.hua.cache;
 
+import java.util.Iterator;
+
 /**
  * This is an interface with all the methods that a 
  * doubly linked list must have
@@ -8,7 +10,7 @@ package org.hua.cache;
  * @param <K>
  * @param <V>
  */
-public interface ListInterface<K,V> {
+public interface ListInterface<K,V> extends Iterable<Node<K,V>>{
   
     /**
      * Adds a node and it's payload in the start of the list
@@ -27,12 +29,14 @@ public interface ListInterface<K,V> {
     /**
      * Removes the last node of the list, 
      * and connects with the rest
+     * @return 
      */
     Node<K,V> removeLast();
     
     /**
      * Not necessary for the app we make
      * It removes the first node of the list, and connects with the rest
+     * @return 
      */
     Node<K,V> removeFirst();
     
@@ -74,7 +78,13 @@ public interface ListInterface<K,V> {
     
     
     /**
-     * 
+     * In case than an element exists in the list we don't add it again , 
+     * instead we move it in the top of the list
+     * @param node
      */
     void moveToTop(Node<K,V> node);
+
+    
+    Iterator<Node<K,V>> iterator();
+
 }

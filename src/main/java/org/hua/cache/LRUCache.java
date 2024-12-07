@@ -2,6 +2,8 @@
 package org.hua.cache;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -62,7 +64,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
         if (map.containsKey(key)){
             
             Node<K,V> node = map.get(key);
-            
+
             node.getNewEntry().setValue(value);
             
             list.moveToTop(node);
@@ -72,16 +74,29 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         if (actualSize >= totalSize){
             
-            Node<K,V> node = list.removeLast();
+            Node<K,V> node = list.removeFirst();
             map.remove(node.getNewEntry().getKey());
             actualSize--;
         }
         
         
-        list.addFirst(key, value);
-        Node<K,V> newNode = list.getFirst();
+        list.addLast(key, value);
+        Node<K,V> newNode = list.getLast();
         map.put(key, newNode);
         actualSize++;
+    }
+    
+    @Override 
+    public void print (){
+        if (actualSize == 0)
+            throw new NoSuchElementException ("Nothing to print");
+        
+        for (Iterator<Node<K, V>> it = list.iterator(); it.hasNext();) {
+            Node<K,V> n = it.next();
+            System.out.println ("Value\t\tKey");
+            System.out.println (n.getNewEntry().getValue()+"\t"+n.getNewEntry().getKey()+"<->");
+        }
+    
     }
     
 }
