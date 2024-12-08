@@ -27,5 +27,9 @@ public interface Cache <K, V>{
      */
     void put (K key, V value);
     
+    
+    /**
+     * Used for debugging purposes
+     */
     void print();
 }

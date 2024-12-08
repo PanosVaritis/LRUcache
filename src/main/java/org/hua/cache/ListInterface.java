@@ -79,12 +79,15 @@ public interface ListInterface<K,V> extends Iterable<Node<K,V>>{
     
     /**
      * In case than an element exists in the list we don't add it again , 
-     * instead we move it in the top of the list
+     * instead we move it in the top of the list (The tail for the purposes of the cache)
      * @param node
      */
     void moveToTop(Node<K,V> node);
 
-    
+    /**
+     * This is an iterator for the list
+     * @return 
+     */
     Iterator<Node<K,V>> iterator();
 
 }

@@ -148,7 +148,6 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
         }
         
         Node<K,V> tempo = head;
-        
         while (tempo != null){
             System.out.print (tempo.getNewEntry().getValue() +" <--> ");
             tempo = tempo.getNext();
@@ -166,7 +165,6 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
 
     private void addNodeToStart(Node<K,V> node){
     
-        
         if (isEmpty()){
             this.head = node;
             this.tail = node;
@@ -175,19 +173,29 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
             tail.setNext(node);
             tail = node;
         }
+        size++;
     }
     
     private void removeNodeFromPosition(Node<K,V> node){
-        Node<K,V> tempo = node.getPrev().getNext();
-        tempo.setNext(node.getNext());
         
-        Node<K,V> tempo1 = node.getNext().getPrev();
-        tempo1.setPrev(node.getPrev());
-        
-        
-        node.setNext(null);
-        node.setPrev(null);
-    
+        if (node.getPrev() == null){
+            Node<K,V> tempo = head;
+            head = head.getNext();
+            head.setPrev(null);
+            tempo.setNext(null);
+            tempo.setPrev(null);
+
+        }else{
+            
+            Node<K,V> tmp = node.getPrev();
+            tmp.setNext(node.getNext());
+            node.setNext(null);
+
+            Node<K,V> tmp1 = tmp.getNext();
+            tmp1.setPrev(node.getPrev());
+            node.setPrev(null);
+        }
+        size--;
     }
     
     @Override 

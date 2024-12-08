@@ -91,12 +91,12 @@ public class LRUCache<K,V> implements Cache<K,V>{
         if (actualSize == 0)
             throw new NoSuchElementException ("Nothing to print");
         
-        for (Iterator<Node<K, V>> it = list.iterator(); it.hasNext();) {
-            Node<K,V> n = it.next();
-            System.out.println ("Value\t\tKey");
-            System.out.println (n.getNewEntry().getValue()+"\t"+n.getNewEntry().getKey()+"<->");
+        Iterator<Node<K,V>> it = list.iterator();
+        System.out.println ("Key\t\tValue");
+        while (it.hasNext()){
+            Node<K,V> node = it.next();
+            System.out.println (node.getNewEntry().getKey()+"\t\t"+node.getNewEntry().getValue());
         }
-    
     }
     
 }
