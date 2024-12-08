@@ -99,4 +99,28 @@ public class LRUCache<K,V> implements Cache<K,V>{
         }
     }
     
+    
+    public void emptyCache(){
+     
+        this.actualSize = 0;
+        
+        list.clear();
+        
+        map.clear();
+        
+    }
+    
+
+    public int getActualSize() {
+        return actualSize;
+    }
+
+    public int getTotalSize() {
+        return totalSize;
+    }
+    
+    
+    
+    
+    
 }

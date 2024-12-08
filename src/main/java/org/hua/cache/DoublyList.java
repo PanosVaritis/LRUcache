@@ -178,23 +178,47 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
     
     private void removeNodeFromPosition(Node<K,V> node){
         
+        //Case the list has only one node.
+        if (head == tail){
+            head = null;
+            tail = null;
+            node.setNext(null);
+            node.setPrev(null);
+            size--;
+            return;
+        }
+        
+        //Case that the node we want to remove is the first node of the list
         if (node.getPrev() == null){
             Node<K,V> tempo = head;
             head = head.getNext();
             head.setPrev(null);
             tempo.setNext(null);
             tempo.setPrev(null);
-
-        }else{
-            
-            Node<K,V> tmp = node.getPrev();
-            tmp.setNext(node.getNext());
-            node.setNext(null);
-
-            Node<K,V> tmp1 = tmp.getNext();
-            tmp1.setPrev(node.getPrev());
-            node.setPrev(null);
+            size--;
+            return;
         }
+        
+        //Case that the node we want to remove is the last node of the list
+        if (node.getNext() == null){
+            Node<K,V> tempo = tail;
+            tail = tail.getPrev();
+            tail.setNext(null);
+            tempo.setNext(null);
+            tempo.setPrev(null);
+            size--;
+            return;
+        }
+        
+        //Case that the node we want to remove is somewhere in the list
+        Node<K,V> tmp = node.getPrev();
+        tmp.setNext(node.getNext());
+        node.setNext(null);
+
+        Node<K,V> tmp1 = tmp.getNext();
+        tmp1.setPrev(node.getPrev());
+        node.setPrev(null);
+        
         size--;
     }
     
