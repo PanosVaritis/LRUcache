@@ -11,36 +11,96 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LRUCacheTest {
     
     
-    private LRUCache<Integer, String> cache = new LRUCache<>(10);
+    private Cache<Integer, String> cache;
+    
+    @BeforeEach
+    public void setUp(){
+        cache = new LRUCache<>(3);
+    }
+    
     
     @Test
     public void cacheTest() {
         
-        int count = 20;
-        for (int i  = 0;i < count;i++){
-            cache.put(i, " ");
-        }
+        cache.put(1, "One");
+        cache.put(2, "Two");
+        cache.put(3, "Three");
         
-        assertTrue (cache.getActualSize() <= cache.getTotalSize());
+        
+        assertEquals("One", cache.get(1));
+        assertEquals("Two", cache.get(2));
+        assertEquals("Three", cache.get(3));
+    }
     
+    @Test
+    public void cacheTest1(){
+
+        cache.put(1, "One");
+        cache.put(2, "Two");
+        cache.put(3, "Three");
+
+        assertEquals("One", cache.get(1));
+        assertEquals("Two", cache.get(2));
+        assertEquals("Three", cache.get(3));
         
-        int count1 = 100000;
-        for (int i = 0;i < count1;i++){
-            cache.put(i, "");
-        }
+        cache.put(4, "Four");
+                
+        assertNull(cache.get(1));
+        assertEquals("Two", cache.get(2));
+        assertEquals("Three", cache.get(3));
+        assertEquals("Four", cache.get(4));
+
+    }
+
+    @Test
+    public void cacheTest2(){
         
-        assertTrue(cache.getActualSize() == cache.getTotalSize());
+        cache.put(1, "One");
+        cache.put(2, "Two");
+        cache.put(3, "Three");
+
+        assertEquals("One", cache.get(1));
+        assertEquals("Two", cache.get(2));
+        assertEquals("Three", cache.get(3));
+        
+        cache.get(1);
+        cache.put(4, "Four");
+        
+        assertNull(cache.get(2));
+        assertEquals("One", cache.get(1));
+        assertEquals("Three", cache.get(3));
+        assertEquals("Four", cache.get(4));
+    }
     
-        cache.emptyCache();
-        assertTrue(cache.getActualSize() == 0);
-        assertTrue(cache.getTotalSize() == 10);
+    
+    @Test
+    public void cacheTest3(){
         
+        cache.put(1, "One");
+        cache.put(2, "Two");
+    
+        assertEquals ("One", cache.get(1));
+        assertEquals ("Two", cache.get(2));
         
-        for (int i = 0;i < count;i++){
-            cache.put(1, " ");
-        }
-        assertTrue (cache.getActualSize() == 1);
+        cache.put(3, "Three");
         
+        assertEquals("Three", cache.get(3));
+        
+        cache.put(4, "Four");
+        assertNull(cache.get(1));
+        assertEquals("Two", cache.get(2));
+        assertEquals("Three", cache.get(3));
+        assertEquals("Four", cache.get(4));
+    }
+    
+
+    @Test
+    public void cacheTest4(){
+        
+        assertNull(cache.get(1));
+        assertNull(cache.get(2));
+        assertNull(cache.get(3));
+        assertNull(cache.get(4));
     }
     
 }
