@@ -4,8 +4,7 @@ package org.hua.cache;
 import java.util.Iterator;
 
 /**
- * This is an interface with all the methods that a 
- * doubly linked list must have
+ * This is an interface with the most common methods a doubly linked list must have 
  * @author panos
  * @param <K>
  * @param <V>
@@ -14,6 +13,8 @@ public interface ListInterface<K,V> extends Iterable<Node<K,V>>{
   
     /**
      * Adds a node and it's payload in the start of the list
+     * We assume that the start of the list is where the header variable points to
+     * The node is created inside the method according to the key and value that we provide
      * @param key
      * @param value
      */
@@ -21,39 +22,39 @@ public interface ListInterface<K,V> extends Iterable<Node<K,V>>{
     
     /**
      * Adds a node and it's payload in the end of the list
+     * We assume that the end of the list is where the header variable points to
+     * The node is created inside the method according to the key and the value that we provide
      * @param key
      * @param value
      */
     void addLast (K key, V value);
     
     /**
-     * Removes the last node of the list, 
-     * and connects with the rest
-     * @return 
+     * Removes the last node of the list (from the tail), and return's it to the user 
+     * 
+     * @return Node<K,V>
      */
     Node<K,V> removeLast();
     
     /**
-     * Not necessary for the app we make
-     * It removes the first node of the list, and connects with the rest
-     * @return 
+     * Removes the first node from the list (from the head). and return's it to the user
+     * @return Node<K,V> 
      */
     Node<K,V> removeFirst();
     
     /**
-     * 
-     * @return true if the list is empty
-     * false otherwise
+     * Checks if the list is empty (Compares the size with zero)
+     * @return true if the list is empty, false otherwise
      */
     boolean isEmpty();
     
     /**
-     * It drops all the nodes of the list
+     * This method when called will empty the list by dropping all the nodes 
      */
     void clear();
     
     /**
-     * When called it return the first node of the list (The reference of the node)
+     * When called it returns the first node of the list (The reference of the node)
      * @return Entry<K,V>
      */
     Node<K,V> getFirst();
@@ -78,15 +79,15 @@ public interface ListInterface<K,V> extends Iterable<Node<K,V>>{
     
     
     /**
-     * In case than an element exists in the list we don't add it again , 
-     * instead we move it in the top of the list (The tail for the purposes of the cache)
+     * When this method is called is provided with a node reference in order to place it 
+     * in the end of the list (where the tail points at)
      * @param node
      */
     void moveToTop(Node<K,V> node);
 
     /**
      * This is an iterator for the list
-     * @return 
+     * @return Iterator<Node<K,V>>
      */
     Iterator<Node<K,V>> iterator();
 
