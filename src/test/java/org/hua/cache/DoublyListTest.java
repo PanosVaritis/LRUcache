@@ -11,14 +11,19 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class DoublyListTest {
     
+    private ListInterface<Integer, String> list;
+
+    @BeforeEach
+    public void setUp (){
+        list = new DoublyList<>();
+    }
     
-    private ListInterface<Integer, String> list = new DoublyList<>();
+    
     
     @Test
-    public void doublyInsert() {
-        
+    public void listTest1(){
+       
         assertTrue(list.isEmpty());
-
         int count = 100000;
         String text = "Value";
         for (int i = 0;i < count;i++){
@@ -30,7 +35,17 @@ public class DoublyListTest {
         list.clear();
         assertTrue(list.size() == 0);
         
+            
+    }
+    
+    @Test
+    public void listTest2() {
         
+        assertTrue(list.isEmpty());
+
+        
+        int count = 100000;
+        String text = "Value";
         for (int i = 0;i< count;i++){
             list.addLast(i, text);
             assertTrue(list.size() == i+1);
@@ -39,7 +54,15 @@ public class DoublyListTest {
         assertTrue(list.size() == count);
         list.clear();
         assertTrue(list.size() == 0);
+    }
+    
+    @Test
+    public void listTest3(){
+    
+        assertTrue (list.isEmpty());
         
+        int count = 100000;
+        String text = "Value";
         
         for (int i = 0;i < count;i++){
             list.addFirst(i, text);
@@ -49,8 +72,16 @@ public class DoublyListTest {
         assertTrue(list.size() == 2*count);
         list.clear();
         assertTrue(list.size() == 0);
+    }
         
+    @Test
+    public void listTest4(){
+    
+        assertTrue(list.isEmpty());
         
+        int count = 100000;
+        String text = "Value";
+    
         for (int i = 0;i < count;i++){
             list.addLast(i, text);
             assertTrue(list.size() == 1);
@@ -59,7 +90,16 @@ public class DoublyListTest {
         }
         
         assertTrue(list.size() == 0);
+    
+    }
+    
+    @Test
+    public void listTest5(){
         
+        assertTrue(list.isEmpty());
+        
+        int count = 100000;
+        String text = "Value";
         
         for (int i = 0;i < count;i++){
             list.addFirst(i, text);
@@ -73,6 +113,7 @@ public class DoublyListTest {
             assertTrue(list.getLast().getNewEntry().getValue().equals(text));
             list.removeLast();
         }
+        
         assertTrue(list.size() == 0);
         
         
@@ -88,8 +129,8 @@ public class DoublyListTest {
             assertTrue(list.getFirst().getNewEntry().getValue().equals(text));
             list.removeFirst();
         }
-        assertTrue(list.size() == 0);
         
+        assertTrue(list.size() == 0);
     }
     
 }
