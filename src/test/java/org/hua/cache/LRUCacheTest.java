@@ -128,4 +128,87 @@ public class LRUCacheTest {
         assertNull (cache.get(1));
     }
     
+    @Test
+    public void cacheTest6(){
+        
+        int count = 100000;
+        Cache<Integer, String> cache = new LRUCache<>(count);
+        
+        for (int i = 0;i < count;i++){
+            cache.put(i, "Text "+i);
+        }
+        
+        for (int i = 0;i < count;i++){
+            assertEquals("Text "+i, cache.get(i));
+        }
+        
+        cache.put(1, "Panos");
+        cache.put (200000, "Nikos");
+        assertNull (cache.get(0));
+        cache.put (200001, "Maria");
+        cache.put (200002, "Takis");
+        assertNull(cache.get(2));
+        assertNull(cache.get(3));
+    }
+    
+    @Test
+    public void cacheTest7(){
+        
+        //Since we allow to store strings, the deafault value of a string is null
+        cache.put(1, null);
+        assertNull(cache.get(1));
+        
+        cache.put(Integer.MAX_VALUE, "Panagiotis");
+        assertEquals ("Panagiotis", cache.get(Integer.MAX_VALUE));
+        
+        cache.put(Integer.MIN_VALUE, "Dimitrios");
+        assertEquals ("Dimitrios", cache.get(Integer.MIN_VALUE));
+        
+        cache.get(1);
+        cache.put(Integer.MAX_VALUE-1, "Manolis");
+        assertNull(cache.get(Integer.MAX_VALUE));
+    }
+  
+    @Test
+    public void cacheTest8(){
+        
+        int count = 5000000;
+        
+        Cache<Integer, String> myCache = new LRUCache<>(count);
+        
+        for (int i = 0;i < count;i++){
+            myCache.put(i, "Number "+i);
+        }
+        
+        for (int i = 0;i < count;i++){
+            assertEquals ("Number "+i, myCache.get(i));
+        }
+    }
+
+    @Test
+    public void cacheTest9(){
+        
+        int count = 10000;
+        Cache<Integer, Integer> myCache = new LRUCache<>(count);
+        
+        for (int i = 0;i < count;i++){
+            myCache.put(i, i*10);
+        }
+        
+        for (int i = 0;i < count;i++){
+            assertEquals(i*10, myCache.get(i));
+        }
+        
+        for (int i = count;i < count*2;i++){
+            myCache.put (i, i*2);
+        }
+        
+        for (int i = 0;i < count;i++){
+            assertNull(myCache.get(i));
+        }
+        
+        for (int i = count;i < count*2;i++){
+            assertEquals(i*2, myCache.get(i));
+        }
+    }
 }
