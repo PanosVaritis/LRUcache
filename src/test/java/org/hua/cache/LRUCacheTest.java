@@ -211,4 +211,56 @@ public class LRUCacheTest {
             assertEquals(i*2, myCache.get(i));
         }
     }
+    
+    @Test
+    public void cacheTest10(){
+        
+        
+        Cache<String, String> cache = new LRUCache<>(3);
+        
+        assertNull (cache.get("Varitis"));
+        assertNull (cache.get("Rerdios"));
+        assertNull (cache.get("Haralabidis"));
+        
+        cache.put("Varitis", "Data Structures");
+        cache.put("Perdios", "Distributed Systems");
+        cache.put("Haralabidis", "Object Oriented");
+        
+        assertEquals ("Data Structures", cache.get("Varitis"));
+        assertEquals ("Distributed Systems", cache.get("Perdios"));
+        assertEquals ("Object Oriented", cache.get("Haralabidis"));
+        
+        cache.put ("Varitis", "Distributed Systems");
+        cache.put("Bardaki", "Software Eng");
+        assertNull(cache.get("Perdios"));
+        
+    }
+    
+    public void cacheTest11(){
+        
+        Cache<String, String> cache = new LRUCache<>(3);
+        
+        for (int i = 0;i < 100000;i++)
+            cache.put ("Panos", "Varitis"+i);
+        
+        assertEquals ("Varitis"+99999, cache.get("Panos"));
+    }
+    
+    @Test
+    public void cacheTest12(){
+        
+        int count = 100000;
+        Cache<String, String> cache = new LRUCache<>(count);
+        
+        
+        for (int i = 0;i < count;i++)
+            cache.put ("it2021"+i,"Student"+i);
+        
+        for (int i = 0;i < count;i++)
+            assertEquals ("Student"+i, cache.get("it2021"+i));
+        
+        
+        cache.put("it2021"+count, "Student"+count);
+        assertNull (cache.get("it2021"+0));
+    }
 }
