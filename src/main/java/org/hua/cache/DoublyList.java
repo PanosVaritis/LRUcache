@@ -141,22 +141,6 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
     
     
     @Override
-    public void displayForward() {
-        
-        if (isEmpty()){
-            throw new NoSuchElementException ("Nothing to print. The list is empty....");
-        }
-        
-        Node<K,V> tempo = head;
-        while (tempo != null){
-            System.out.print (tempo.getNewEntry().getValue() +" <--> ");
-            tempo = tempo.getNext();
-        }
-        System.out.println("\n");
-    
-    }
-    
-    @Override
     public void moveToTop (Node<K,V> node){
         removeNodeFromPosition(node);
         addNodeToStart(node);
@@ -226,7 +210,6 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
     public Iterator<Node<K,V>> iterator(){
         return new ListIterator();
     }
-    
     
      private class ListIterator implements Iterator<Node<K,V>>{
          

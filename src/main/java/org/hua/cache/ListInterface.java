@@ -73,12 +73,6 @@ public interface ListInterface<K,V> extends Iterable<Node<K,V>>{
     int size();
     
     /**
-     * Used for debugging purposes. It print's the list forward
-     */
-    void displayForward();
-    
-    
-    /**
      * When this method is called is provided with a node reference in order to place it 
      * in the end of the list (where the tail points at)
      * @param node
