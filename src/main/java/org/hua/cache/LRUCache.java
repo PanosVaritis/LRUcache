@@ -28,6 +28,11 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private CacheReplacementPolicy strategy;
     
+    private int hits;
+    
+    private int misses;
+    
+    
     public LRUCache (int totalSize, CacheReplacementPolicy strategy){
         
         if (totalSize <= 0)
@@ -42,18 +47,27 @@ public class LRUCache<K,V> implements Cache<K,V>{
         this.map = new HashMap();
     
         this.strategy = strategy;
+    
+        this.hits = 0;
+        
+        this.misses = 0;
+        
     }
     
 
     @Override
     public V get(K key) {
         
-        if (!map.containsKey(key))
+        if (!map.containsKey(key)){
+            this.misses++;
             return null;
+        }
         
         Node<K,V> node = map.get(key);
         
         list.moveToTop(node);
+        
+        this.hits++;
         
         return node.getNewEntry().getValue();
     }
@@ -93,15 +107,13 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     @Override 
     public int getHitCount (){
-        //to do
-        return 0;
+       return this.hits;
     }
     
     
     @Override 
     public int getMissCount(){
-        //to do
-        return 0;
+        return this.misses;
     }
     
     
