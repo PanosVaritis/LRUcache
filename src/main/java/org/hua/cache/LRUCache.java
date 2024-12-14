@@ -26,9 +26,9 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private int totalSize;
     
-    private CacheReplacementPolicy policy;
+    private CacheReplacementPolicy strategy;
     
-    public LRUCache (int totalSize, CacheReplacementPolicy policy){
+    public LRUCache (int totalSize, CacheReplacementPolicy strategy){
         
         if (totalSize <= 0)
             throw new IllegalArgumentException ("The size of the cache cannot be negative!!!");
@@ -41,7 +41,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         this.map = new HashMap();
     
-        this.policy = policy;
+        this.strategy = strategy;
     }
     
 
@@ -76,16 +76,18 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         if (actualSize >= totalSize){
             
-            Node<K,V> node = list.removeFirst();
-            map.remove(node.getNewEntry().getKey());
-            actualSize--;
+            if(this.strategy == CacheReplacementPolicy.LRU){
+                removeBasedOnLru();
+            }else if (this.strategy == CacheReplacementPolicy.MRU){
+                removeBasedOnMru();
+            }
         }
         
         
         list.addLast(key, value);
         Node<K,V> newNode = list.getLast();
         map.put(key, newNode);
-        actualSize++;
+        this.actualSize++;
     }
     
     
@@ -105,10 +107,16 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private void removeBasedOnLru(){
         
+        Node<K,V> node = list.removeFirst();
+        map.remove(node.getNewEntry().getKey());
+        this.actualSize--;
     }
     
     private void removeBasedOnMru(){
         
+        Node<K,V> node = list.removeLast();
+        map.remove(node.getNewEntry().getKey());
+        this.actualSize--;
     }
     
 }
