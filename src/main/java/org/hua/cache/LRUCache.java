@@ -26,7 +26,9 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private int totalSize;
     
-    public LRUCache (int totalSize){
+    private CacheReplacementPolicy policy;
+    
+    public LRUCache (int totalSize, CacheReplacementPolicy policy){
         
         if (totalSize <= 0)
             throw new IllegalArgumentException ("The size of the cache cannot be negative!!!");
@@ -38,6 +40,8 @@ public class LRUCache<K,V> implements Cache<K,V>{
         this.list = new DoublyList<>();
         
         this.map = new HashMap();
+    
+        this.policy = policy;
     }
     
 
@@ -83,4 +87,28 @@ public class LRUCache<K,V> implements Cache<K,V>{
         map.put(key, newNode);
         actualSize++;
     }
+    
+    
+    @Override 
+    public int getHitCount (){
+        //to do
+        return 0;
+    }
+    
+    
+    @Override 
+    public int getMissCount(){
+        //to do
+        return 0;
+    }
+    
+    
+    private void removeBasedOnLru(){
+        
+    }
+    
+    private void removeBasedOnMru(){
+        
+    }
+    
 }

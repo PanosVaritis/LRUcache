@@ -27,4 +27,16 @@ public interface Cache <K, V>{
      */
     void put (K key, V value);
     
+    /**
+     * In the end is called to detect how many times a requested key existed in the cache
+     * @return number of times the item was found
+     */
+    int getHitCount();
+    
+    /**
+     * In the end is called to detect how many times a requested key did not exist in the cache
+     * @return number of times the item was not found
+     */
+    int getMissCount();
+    
 }
