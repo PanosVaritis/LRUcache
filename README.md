@@ -3,8 +3,8 @@
 This is a simple app for a cache. The user can select from the different available strategies and execute the program
 
 ##Reuirements
--Maven 
--JDK version 8 or higher
+1.Maven 
+2.JDK version 8 or higher
 
 #Installation 
 1. Open the terminal and create a file that will store the project (for example mkdir test)
