@@ -18,7 +18,7 @@ This is a simple app for a cache. The user can select from the different availab
 #Compilation and execution
 1. Navigate to the project, in the file that contains the pom file
 2. mvn clean package (builds the project, creates the target, the jar, and executes all the test)
-3. java -cp target/.....jar org.hua.
+3. java -cp target/.....jar org.hua.cache.App
 
 #Executing the tests
 1. mvn test: this command will execute all the junit test that the project has (all the classes and all the tests)
