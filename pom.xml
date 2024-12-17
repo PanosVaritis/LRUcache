@@ -27,7 +27,24 @@
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>org.hua.cache.App</exec.mainClass>
     </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version> <!-- Upgrade to a version that supports Java 21 -->
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
