@@ -2,7 +2,7 @@
 package org.hua.cache;
 
 /**
- *
+ * Simple class for a node. Each node besides it's references to other nodes, it contains an Entry
  * @author panos
  * @param <K>
  * @param <V>
@@ -46,8 +46,4 @@ public class Node <K,V>{
     public void setPrev(Node<K, V> prev) {
         this.prev = prev;
     }
-    
-    
-    
-    
 }

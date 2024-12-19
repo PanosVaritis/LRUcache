@@ -22,7 +22,7 @@ public interface ListInterface<K,V> extends Iterable<Node<K,V>>{
     
     /**
      * Adds a node and it's payload in the end of the list
-     * We assume that the end of the list is where the header variable points to
+     * We assume that the end of the list is where the tail variable points to
      * The node is created inside the method according to the key and the value that we provide
      * @param key
      * @param value
