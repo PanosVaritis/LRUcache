@@ -25,7 +25,7 @@ This is a simple app for a cache. The user can select from the different availab
     ```
 3. Execute main
     ```bash
-    java -cp target/.....jar org.hua.cache.App
+    java -cp target/cache-1.0-SNAPSHOT.jar org.hua.cache.App
     ```
 
 
