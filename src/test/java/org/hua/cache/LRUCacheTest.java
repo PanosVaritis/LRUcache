@@ -357,24 +357,37 @@ public class LRUCacheTest {
         assertEquals ("Har5", myCache.get(9));
         assertEquals ("Har6", myCache.get(10));
         assertEquals ("Har7", myCache.get(11));
-        
-        
     }
     
+    @Test
+    public void cacheTestMru3(){
+        Integer count = 1000;
+        Cache<Integer, Integer> myCache = new LRUCache<>(count, CacheReplacementPolicy.MRU);
+        
+        for (int i = 0;i < count;i++){
+            myCache.put(i, i);
+            assertEquals(i, myCache.get(i));
+        }
+        
+        for (int i = count;i < 2*count;i++)
+            myCache.put(i, i);
+        
+        for (int i = 0;i < count-1;i++)
+            assertEquals(i, myCache.get(i));
+        
+        assertEquals (2*count - 1, myCache.get(2*count - 1));
+        
+        
+        for (int i = count; i < 2*count -1;i++)
+            assertNull(myCache.get(i));
+    }
     
-    
-    
-    
-//    @Test
-//    public void cacheTestMru4(){
-//        
-//    }
 //    
 //    @Test
-//    public void cacheTestMru5(){
+//    public void cacheTestLruSpecial2(){
 //        
 //    }
-//    
+////    
 //    @Test
 //    public void cacheTestMru6(){
 //        
