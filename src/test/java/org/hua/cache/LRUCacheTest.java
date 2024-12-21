@@ -266,8 +266,9 @@ public class LRUCacheTest {
         assertNull (myCache.get("it2021"+0));
     }
     
+    //From this test and after we examine the MRU changing policy
     @Test
-    public void cacheTest13(){
+    public void cacheTestMru(){
         Cache<Integer,String> myCache = new LRUCache<>(3, CacheReplacementPolicy.MRU);
         
         myCache.put(1, "One");
@@ -284,5 +285,43 @@ public class LRUCacheTest {
         assertEquals("Two", myCache.get(2));
         assertEquals("One", myCache.get(1));
         assertEquals("Four", myCache.get(4));
+    }
+    
+    
+    @Test
+    public void cacheTestMru1(){
+        
+    }
+    
+    @Test
+    public void cacheTestMru2(){
+        
+    }
+    
+    
+    @Test
+    public void cacheTestMru3(){
+        
+    }
+    
+    
+    @Test
+    public void cacheTestMru4(){
+        
+    }
+    
+    @Test
+    public void cacheTestMru5(){
+        
+    }
+    
+    @Test
+    public void cacheTestMru6(){
+        
+    }
+    
+    @Test
+    public void cacheTestMru7(){
+        
     }
 }
