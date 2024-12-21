@@ -334,13 +334,37 @@ public class LRUCacheTest {
         assertEquals ("Har7", myCache.get(11));
     }
 
-//    //This test does the same operations with the above. The only difference is in the policy
-//    @Test
-//    public void cacheTestMru3(){
-//        
-//    }
-////    
-//    
+    //This test does the same operations with the above. The only difference is in the policy
+    @Test
+    public void cacheTestLruSpecial(){
+        Cache<Integer, String> myCache = new LRUCache<>(3, CacheReplacementPolicy.LRU);
+   
+        myCache.put(1, "Harokopeio");
+        myCache.put(2, "Ekpa");
+        myCache.put(3, "Assoe");
+        myCache.put(4, "Har");
+        myCache.put(5, "Har1");
+        myCache.put(6, "Har2");
+        myCache.put(7, "Har3");
+        myCache.put(8, "Har4");
+        myCache.put(9, "Har5");
+        myCache.put(10, "Har6");
+        myCache.put(11, "Har7");
+        
+        for (int i = 1;i < 9;i++)
+            assertNull(myCache.get(i));
+        
+        assertEquals ("Har5", myCache.get(9));
+        assertEquals ("Har6", myCache.get(10));
+        assertEquals ("Har7", myCache.get(11));
+        
+        
+    }
+    
+    
+    
+    
+    
 //    @Test
 //    public void cacheTestMru4(){
 //        
