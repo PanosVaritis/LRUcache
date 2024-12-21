@@ -28,8 +28,10 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private CacheReplacementPolicy strategy;
     
+    //Variable used to count the hits. Initialized each time to zero
     private int hits;
     
+    //Variable used to count the misses. Initialized each time to zero
     private int misses;
     
     
@@ -119,6 +121,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private void removeBasedOnLru(){
         
+        //We remove the first node of the list. Lest recent used item from the cache
         Node<K,V> node = list.removeFirst();
         map.remove(node.getNewEntry().getKey());
         this.actualSize--;
@@ -126,6 +129,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private void removeBasedOnMru(){
         
+        //We remove the last node of the list. Most recent used item from the cache
         Node<K,V> node = list.removeLast();
         map.remove(node.getNewEntry().getKey());
         this.actualSize--;

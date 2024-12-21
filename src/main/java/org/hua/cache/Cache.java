@@ -28,13 +28,15 @@ public interface Cache <K, V>{
     void put (K key, V value);
     
     /**
-     * In the end is called to detect how many times a requested key existed in the cache
+     * When this method is called will return the number of hits in the cache so far
+     * It doesn't make any calculation. Just returns the value. 
      * @return number of times the item was found
      */
     int getHitCount();
     
     /**
-     * In the end is called to detect how many times a requested key did not exist in the cache
+     * When this method is called will return the number of misses in the cache so far
+     * It doesn't make any calculation. Just returns the value. 
      * @return number of times the item was not found
      */
     int getMissCount();
