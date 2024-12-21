@@ -290,38 +290,74 @@ public class LRUCacheTest {
     
     @Test
     public void cacheTestMru1(){
+        Cache<Integer, String> myCache = new LRUCache<>(3, CacheReplacementPolicy.MRU);
         
+        
+        myCache.put(1, "Panos");
+        myCache.put(1, "Dimitris");
+        myCache.put(1, "Nikos");
+        
+        myCache.put(2, "Panos");
+        
+        myCache.put(3, "Manolis");
+        assertEquals ("Nikos", myCache.get(1));
+        
+        myCache.put(3, "Marios");
+        myCache.put(4, "Dimitris");
+        assertNull (myCache.get(3));
+        myCache.put(9, "Something");
+        assertNull (myCache.get(4));
     }
     
     @Test
     public void cacheTestMru2(){
+        Cache<Integer, String> myCache = new LRUCache<>(3, CacheReplacementPolicy.MRU);
         
-    }
-    
-    
-    @Test
-    public void cacheTestMru3(){
         
-    }
-    
-    
-    @Test
-    public void cacheTestMru4(){
+        myCache.put(1, "Harokopeio");
+        myCache.put(2, "Ekpa");
+        myCache.put(3, "Assoe");
+        myCache.put(4, "Har");
+        myCache.put(5, "Har1");
+        myCache.put(6, "Har2");
+        myCache.put(7, "Har3");
+        myCache.put(8, "Har4");
+        myCache.put(9, "Har5");
+        myCache.put(10, "Har6");
+        myCache.put(11, "Har7");
         
-    }
-    
-    @Test
-    public void cacheTestMru5(){
+        for (int i = 3; i < 11;i++)
+            assertNull(myCache.get(i));
         
+        assertEquals ("Harokopeio", myCache.get(1));
+        assertEquals ("Ekpa", myCache.get(2));
+        assertEquals ("Har7", myCache.get(11));
     }
-    
-    @Test
-    public void cacheTestMru6(){
-        
-    }
-    
-    @Test
-    public void cacheTestMru7(){
-        
-    }
+
+//    //This test does the same operations with the above. The only difference is in the policy
+//    @Test
+//    public void cacheTestMru3(){
+//        
+//    }
+////    
+//    
+//    @Test
+//    public void cacheTestMru4(){
+//        
+//    }
+//    
+//    @Test
+//    public void cacheTestMru5(){
+//        
+//    }
+//    
+//    @Test
+//    public void cacheTestMru6(){
+//        
+//    }
+//    
+//    @Test
+//    public void cacheTestMru7(){
+//        
+//    }
 }
