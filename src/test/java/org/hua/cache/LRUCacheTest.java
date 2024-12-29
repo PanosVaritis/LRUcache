@@ -402,15 +402,4 @@ public class LRUCacheTest {
         for (int i = count; i < 2*count;i++)
             assertEquals (i, myCache.get(i));
     }
-
-
-//    @Test
-//    public void cacheTestMru6(){
-//        
-//    }
-//    
-//    @Test
-//    public void cacheTestMru7(){
-//        
-//    }
 }
