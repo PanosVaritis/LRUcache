@@ -96,6 +96,8 @@ public class LRUCache<K,V> implements Cache<K,V>{
                 removeBasedOnLru();
             }else if (this.strategy == CacheReplacementPolicy.MRU){
                 removeBasedOnMru();
+            }else if (this.strategy == CacheReplacementPolicy.LFU){
+                removeBasedOnLfu();
             }
         }
         
@@ -133,6 +135,13 @@ public class LRUCache<K,V> implements Cache<K,V>{
         Node<K,V> node = list.removeLast();
         map.remove(node.getNewEntry().getKey());
         this.actualSize--;
+    }
+    
+    
+    private void removeBasedOnLfu(){
+        
+        //We remove the node of the list that has been used the fewer times
+        
     }
     
 }
