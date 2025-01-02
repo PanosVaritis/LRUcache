@@ -42,32 +42,34 @@ public class App {
 
         
 
-        Set<Integer> fr = new HashSet<>();
-        for (int i = 1;i <= 10;i++)
-            fr.add(i);
-        
-        Set<Integer> all = new HashSet<>();
-        for (int i = 1;i <= 200;i++)
-            all.add(i);
-        
-        
         
         for (int i = 0;i < operations;i++){
             
+            
             if (random.nextInt(100) < 70){
-                List<Integer> frequent = new ArrayList<>(fr);
-                key = frequent.get(random.nextInt(frequent.size()));
-            }else {
-                List<Integer> allKeys = new ArrayList<>(all);
-                key = allKeys.get(random.nextInt(all.size()));
-            }
 
-            if (random.nextBoolean()){
-                cache.get(key);
+                key = random.nextInt(10) + 1;
+                
             }else {
+                
+                key = random.nextInt(200) + 1;
+                
+                while (key <= 10)
+                    key = random.nextInt(200) + 1;
+                
+            }
+            
+            if (random.nextBoolean()){
+                
+                cache.get(key);
+                
+            }else {
+                
                 cache.put(key, "Student"+key);
+                
             }
         }
+        
         
         
         System.out.println ("Total operations: "+operations);
@@ -75,6 +77,12 @@ public class App {
         System.out.println ("Cache misses: "+cache.getMissCount());
         System.out.println ("Hit rate: "+cache.getHitCount()/100.0);
         System.out.println ("Miss Rate: "+cache.getMissCount()/100.0);
+
+        
+        
+        
+        
+        
         
     }
 }
