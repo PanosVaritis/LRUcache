@@ -1,13 +1,10 @@
 
 package org.hua.cache;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 
 import java.util.Random;
-import java.util.Set;
+
 /**
  *
  * @author panos
@@ -24,13 +21,11 @@ public class App {
         Integer key;
         int operations = 10000;
         
-        
         System.out.println ("Welcome to the cache!!! Please select your strategy.");
         System.out.println ("1. LRU("+CacheReplacementPolicy.LRU+")");
         System.out.println ("2. MRU("+CacheReplacementPolicy.MRU+")");
         System.out.print ("Insert your choice (MRU or LRU): ");
         String dec = scanner.nextLine();
-        
         
         if (dec.trim().equalsIgnoreCase("LRU")){
            cache = new LRUCache<>(count, CacheReplacementPolicy.LRU); 
@@ -40,49 +35,32 @@ public class App {
             throw new IllegalArgumentException ("The selected value is not correct");
         }
 
-        
-
-        
         for (int i = 0;i < operations;i++){
-            
             
             if (random.nextInt(100) < 70){
 
                 key = random.nextInt(10) + 1;
-                
             }else {
                 
                 key = random.nextInt(200) + 1;
                 
                 while (key <= 10)
                     key = random.nextInt(200) + 1;
-                
             }
             
             if (random.nextBoolean()){
                 
                 cache.get(key);
-                
             }else {
                 
                 cache.put(key, "Student"+key);
-                
             }
         }
-        
-        
         
         System.out.println ("Total operations: "+operations);
         System.out.println ("Cache hits: "+cache.getHitCount());
         System.out.println ("Cache misses: "+cache.getMissCount());
         System.out.println ("Hit rate: "+cache.getHitCount()/100.0);
         System.out.println ("Miss Rate: "+cache.getMissCount()/100.0);
-
-        
-        
-        
-        
-        
-        
     }
 }
