@@ -1,8 +1,8 @@
 
 package org.hua.cache;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -88,13 +88,17 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         if (map.containsKey(key)){
             
-            Node<K,V> node = map.get(key);
-
-            node.getNewEntry().setValue(value);
-            
-            list.moveToTop(node);
-            
-            return;
+            if (this.strategy == CacheReplacementPolicy.LFU){
+                
+                duplicateWithLFU(key, value);
+                return ;
+                
+            }else {
+                
+                duplicateWithOthers(key, value);
+                return ;
+                
+            }
         }
         
         if (actualSize >= totalSize){
@@ -164,8 +168,6 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private void updateFrequency (Node<K,V> node){
         
-        //The node that comes here will have his frequrncy increased and moved to another position of the map
-        
         //We have the old frequency stored locally in case we need it
         Integer oldFrequency = node.getNewEntry().getCounter();
         
@@ -175,6 +177,10 @@ public class LRUCache<K,V> implements Cache<K,V>{
         //We have the new frequency stored locally in case we need it
         Integer newFrequency = node.getNewEntry().getCounter();
         
+        removeFromTreeLinkedList(node);
+        
+        addToTreeLinkedList(node);
+
     }
     
     
@@ -187,7 +193,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         if (!(treeMap.containsKey(1))){
             
-            treeMap.put(1, new ArrayList<>());
+            treeMap.put(1, new LinkedList<>());
             
         }
         
@@ -204,4 +210,75 @@ public class LRUCache<K,V> implements Cache<K,V>{
             this.actualSize++;
         
     }
+    
+    
+    private void duplicateWithLFU(K key, V value){
+        
+        Node<K,V> node = map.get(key);
+        node.getNewEntry().setValue(value);
+        list.moveToTop(node);
+        updateFrequency(node);
+        
+        
+        
+    }
+    
+    private void duplicateWithOthers (K key, V value){
+                    
+            Node<K,V> node = map.get(key);
+            node.getNewEntry().setValue(value);
+            list.moveToTop(node);
+            
+    }
+    
+    
+    private void removeFromTreeLinkedList(Node<K,V> node){
+        
+        Integer freq = node.getNewEntry().getCounter();
+        freq--;
+        
+        List<Node<K,V>> myList = treeMap.get(freq);
+        
+        //The list only has one node
+        if (myList.size() == 1){
+            return ;
+        }
+        
+        //This is the last node of the list
+        if (node.getNext() == null){
+            return ;
+        }
+        
+        //This is the first node of the list
+        if (node.getPrev() == null){
+            return ;
+        }
+
+        
+        //The node might be anywhere on the list
+        node.getNext();
+
+
+        
+        
+        
+    }
+    
+    
+    private void addToTreeLinkedList (Node<K,V> node){
+        
+        
+        if (!(treeMap.containsKey(node.getNewEntry().getCounter()))){
+            
+            treeMap.put(node.getNewEntry().getCounter(), new LinkedList<>());
+            
+        }
+        
+        treeMap.get(node.getNewEntry().getCounter()).add(node);
+        
+    }
+    
+    
+    
+       
 }
