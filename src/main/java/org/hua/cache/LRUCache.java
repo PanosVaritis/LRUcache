@@ -2,6 +2,9 @@
 package org.hua.cache;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * This is the cache implementation
@@ -33,6 +36,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
     //Variable used to count the misses. Initialized each time to zero
     private int misses;
     
+    private TreeMap<Integer, List<Node<K,V>>> treeMap;
     
     public LRUCache (int totalSize, CacheReplacementPolicy strategy){
         
@@ -52,6 +56,9 @@ public class LRUCache<K,V> implements Cache<K,V>{
         this.hits = 0;
         
         this.misses = 0;
+        
+        if (this.strategy == CacheReplacementPolicy.LFU)
+            treeMap = new TreeMap<>();
         
     }
     
@@ -139,7 +146,32 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private void removeBasedOnLfu(){
         
-        //We remove the node of the list that has been used the fewer times
+        //We use the first entry method, that return the first enrty of the the map. The entry is the key and the value
+        Map.Entry<Integer ,List<Node<K,V>>> entry = treeMap.firstEntry();
+        
+        //After we get the entry we take the value of the entry whick is the node list
+        List<Node<K,V>> nodeList = entry.getValue();
+        
+        //Using the methods that the list provides we can remove the first node in O(1) complexity
+        nodeList.removeFirst();
+        
+        //We decrease the size of the cache
+        this.actualSize--;
+    }
+    
+    
+    private void updateFrequency (Node<K,V> node){
+        
+        //The node that comes here will have his frequrncy increased and moved to another position of the map
+        
+        //We have the old frequency stored locally in case we need it
+        Integer oldFrequency = node.getNewEntry().getCounter();
+        
+        //We use the method and we increase the frequency of the node
+        node.getNewEntry().increaseCounter();
+        
+        //We have the new frequency stored locally in case we need it
+        Integer newFrequency = node.getNewEntry().getCounter();
         
     }
     
