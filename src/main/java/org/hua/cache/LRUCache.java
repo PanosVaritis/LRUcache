@@ -1,6 +1,7 @@
 
 package org.hua.cache;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,10 +109,11 @@ public class LRUCache<K,V> implements Cache<K,V>{
         }
         
         
-        list.addLast(key, value);
-        Node<K,V> newNode = list.getLast();
-        map.put(key, newNode);
-        this.actualSize++;
+        if (this.strategy == CacheReplacementPolicy.LFU){
+            addBasedOnLFU(key, value);
+        }else {
+            addBasedOnTheOtherStrategies(key, value);
+        }
     }
     
     
@@ -175,4 +177,31 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
     }
     
+    
+    
+    private void addBasedOnLFU(K key, V value){
+        
+        list.addLast(key, value);
+        Node<K,V> node = list.getLast();
+        map.put(key, node);
+        
+        if (!(treeMap.containsKey(1))){
+            
+            treeMap.put(1, new ArrayList<>());
+            
+        }
+        
+        treeMap.get(1).add(node);
+        this.actualSize++;
+    }
+    
+    
+    private void addBasedOnTheOtherStrategies(K key, V value){
+        
+            list.addLast(key, value);
+            Node<K,V> newNode = list.getLast();
+            map.put(key, newNode);
+            this.actualSize++;
+        
+    }
 }
