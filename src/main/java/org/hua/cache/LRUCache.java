@@ -37,7 +37,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
     //Variable used to count the misses. Initialized each time to zero
     private int misses;
     
-    private TreeMap<Integer, List<Node<K,V>>> treeMap;
+    private TreeMap<Integer, SingleInter<Node<K,V>>> treeMap;
     
     public LRUCache (int totalSize, CacheReplacementPolicy strategy){
         
@@ -193,7 +193,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         if (!(treeMap.containsKey(1))){
             
-            treeMap.put(1, new LinkedList<>());
+            treeMap.put(1, new SingleList<>());
             
         }
         
@@ -237,7 +237,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
         Integer freq = node.getNewEntry().getCounter();
         freq--;
         
-        List<Node<K,V>> myList = treeMap.get(freq);
+        SingleInter<Node<K,V>> myList = treeMap.get(freq);
         
         //The list only has one node
         if (myList.size() == 1){

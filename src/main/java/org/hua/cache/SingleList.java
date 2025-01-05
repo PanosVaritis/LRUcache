@@ -5,24 +5,21 @@ import java.util.NoSuchElementException;
 /**
  *Single Linked List Implementation
  * @author panos
- * @param <T>
+ * @param <V>
  */
-public class SingleList <T> {
+public class SingleList <V> implements SingleInter <V> {
+    
+    private Node <V> head;
+    
+    private int size;
     
     
-    private static class Node <T> {
-        public T data;
-        public Node <T> next;
-        
-        public Node (T data){
-            this.data = data;
-            this.next = null;
-        }
+    public SingleList (){
+        this.size = 0;
     }
     
-    private Node <T> head;
     
-    public void addToList (T data){
+    public void add (V data){
         
         Node newNode = new Node (data);
                 
@@ -38,7 +35,7 @@ public class SingleList <T> {
     }
     
     
-    public void removeFromList(){
+    public void remove(){
         
         if (head == null){
             throw new NoSuchElementException ("Cannot remove element from empty list!!");
@@ -47,17 +44,33 @@ public class SingleList <T> {
             head = theNext;
             //head = head.next;            
         }
+    }
+    
+    
+    public int size (){
+    
+        return this.size;
+    }
+    
+    public boolean isEmpty(){
+        
+        return this.size == 0;
         
     }
     
-    public void printList (){
+    
+    
+    
+    
+        private static class Node <V> {
+        public V data;
+        public Node <V> next;
         
-        Node current = head;
-        while (current != null){
-            System.out.print (current.data + " -> ");
-            current = current.next;
+        public Node (V data){
+            this.data = data;
+            this.next = null;
         }
-        
-        System.out.println ("null");
     }
+    
+    
 }
