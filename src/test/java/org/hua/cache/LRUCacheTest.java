@@ -402,4 +402,41 @@ public class LRUCacheTest {
         for (int i = count; i < 2*count;i++)
             assertEquals (i, myCache.get(i));
     }
+
+
+    @Test
+    public void cacheTestLfu1 (){
+        
+        Cache<Integer, String> myCache = new LRUCache<>(3, CacheReplacementPolicy.LFU);
+        
+        //All of them have the frequency counter as default set to 1
+        myCache.put(1, "Panos");
+        myCache.put(2, "Nikos");
+        myCache.put(3, "Takis");
+        
+        //Here we ask (get) 5 times the key 1 so the frequency counter should become 6. The other frequency counters remain to 1
+        assertEquals("Panos", myCache.get(1));
+        myCache.get(1);
+        myCache.get(1);
+        myCache.get(1);
+        myCache.get(1);
+        
+        //The frequency for the object with key 2 is now 3
+        myCache.get(2);
+        myCache.get(2);
+        
+        //Overriding the value. The frequency counter for object with key 3 will become 2
+        myCache.put(3, "Nikol");
+        
+        /*
+        In the head of the cache we will have the object with key 3. In he middle the object with key 2,
+        and in the tail the object with key 3. Bellow we will try to add a completely new key - value pair in the,
+        cache. Normally the object with key number 3 should be removed since it has the lower frequency counter
+        */
+        
+        myCache.put(4, "Thanasis");
+        assertNull(myCache.get(3));
+    }
+    
+
 }
