@@ -2,8 +2,7 @@
 package org.hua.cache;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -37,7 +36,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
     //Variable used to count the misses. Initialized each time to zero
     private int misses;
     
-    private TreeMap<Integer, SingleInter<Node<K,V>>> treeMap;
+    private TreeMap<Integer, HashMap<Node<K,V>,Void>> treeMap;
     
     public LRUCache (int totalSize, CacheReplacementPolicy strategy){
         
@@ -77,6 +76,10 @@ public class LRUCache<K,V> implements Cache<K,V>{
         list.moveToTop(node);
         
         this.hits++;
+        
+        if (this.strategy == CacheReplacementPolicy.LFU)
+            updateFrequency(node);
+        
         
         return node.getNewEntry().getValue();
     }
@@ -153,13 +156,15 @@ public class LRUCache<K,V> implements Cache<K,V>{
     private void removeBasedOnLfu(){
         
         //We use the first entry method, that return the first enrty of the the map. The entry is the key and the value
-        Map.Entry<Integer ,List<Node<K,V>>> entry = treeMap.firstEntry();
+        Map.Entry<Integer, HashMap<Node<K,V>, Void>> entry = treeMap.firstEntry();
         
         //After we get the entry we take the value of the entry whick is the node list
-        List<Node<K,V>> nodeList = entry.getValue();
+        HashMap<Node<K,V>, Void> nodesWithSameFrequency = entry.getValue();
         
-        //Using the methods that the list provides we can remove the first node in O(1) complexity
-        nodeList.removeFirst();
+        Iterator<Node<K,V>> iterator = nodesWithSameFrequency.keySet().iterator();
+        
+        if (iterator.hasNext())
+            nodesWithSameFrequency.remove(iterator.next());
         
         //We decrease the size of the cache
         this.actualSize--;
@@ -173,11 +178,10 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         //We use the method and we increase the frequency of the node
         node.getNewEntry().increaseCounter();
+       
+        HashMap<Node<K,V>, Void> frequencyMap = treeMap.get(oldFrequency);
         
-        //We have the new frequency stored locally in case we need it
-        Integer newFrequency = node.getNewEntry().getCounter();
-        
-        removeFromTreeLinkedList(node);
+        frequencyMap.remove(node);
         
         addToTreeLinkedList(node);
 
@@ -193,11 +197,11 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         if (!(treeMap.containsKey(1))){
             
-            treeMap.put(1, new SingleList<>());
+            treeMap.put(1, new HashMap<>());
             
         }
         
-        treeMap.get(1).add(node);
+        treeMap.get(1).put(node, null);
         this.actualSize++;
     }
     
@@ -208,7 +212,6 @@ public class LRUCache<K,V> implements Cache<K,V>{
             Node<K,V> newNode = list.getLast();
             map.put(key, newNode);
             this.actualSize++;
-        
     }
     
     
@@ -232,53 +235,16 @@ public class LRUCache<K,V> implements Cache<K,V>{
     }
     
     
-    private void removeFromTreeLinkedList(Node<K,V> node){
-        
-        Integer freq = node.getNewEntry().getCounter();
-        freq--;
-        
-        SingleInter<Node<K,V>> myList = treeMap.get(freq);
-        
-        //The list only has one node
-        if (myList.size() == 1){
-            return ;
-        }
-        
-        //This is the last node of the list
-        if (node.getNext() == null){
-            return ;
-        }
-        
-        //This is the first node of the list
-        if (node.getPrev() == null){
-            return ;
-        }
-
-        
-        //The node might be anywhere on the list
-        node.getNext();
-
-
-        
-        
-        
-    }
-    
-    
     private void addToTreeLinkedList (Node<K,V> node){
         
         
         if (!(treeMap.containsKey(node.getNewEntry().getCounter()))){
             
-            treeMap.put(node.getNewEntry().getCounter(), new LinkedList<>());
+            treeMap.put(node.getNewEntry().getCounter(), new HashMap<>());
             
         }
         
-        treeMap.get(node.getNewEntry().getCounter()).add(node);
-        
+        treeMap.get(node.getNewEntry().getCounter()).put(node, null);
     }
-    
-    
-    
        
 }
