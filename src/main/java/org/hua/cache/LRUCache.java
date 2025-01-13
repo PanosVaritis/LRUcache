@@ -157,29 +157,30 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         //We use the first entry method, that return the first enrty of the the map. The entry is the key and the value
         Map.Entry<Integer, HashMap<Node<K,V>, Void>> entry = treeMap.firstEntry();
-        
+
         //After we get the entry we take the value of the entry which is the node list
         HashMap<Node<K,V>, Void> nodesWithSameFrequency = entry.getValue();
-        
+
         //We choose randomly from the set if nodes with the same frequency, a node to remove
         Iterator<Node<K,V>> iterator = nodesWithSameFrequency.keySet().iterator();
-        
+
         Node<K,V> toBeRemoved = null;
-        
+
         //Here we select the node and remove it from the set of nodes
         if (iterator.hasNext()){
             toBeRemoved = iterator.next();
             nodesWithSameFrequency.remove(toBeRemoved);
         }
-        
-        //The node must also be removed from the hash table and the cache
-        
-        //Here based on the reference that we have we remove it from the hash table
-        map.remove(toBeRemoved.getNewEntry().getKey());
-        
-        
+
+        //Besides the removal of the node from the tree map, we must also remove it from the cache and the hash table
+        if (!(toBeRemoved == null)){
+            list.removeNode(toBeRemoved);
+            map.remove(toBeRemoved.getNewEntry().getKey());
+        }
+
         //We decrease the size of the cache
-        this.actualSize--;
+        this.actualSize--;  
+       
     }
     
     
@@ -233,9 +234,6 @@ public class LRUCache<K,V> implements Cache<K,V>{
         node.getNewEntry().setValue(value);
         list.moveToTop(node);
         updateFrequency(node);
-        
-        
-        
     }
     
     private void duplicateWithOthers (K key, V value){
@@ -243,7 +241,6 @@ public class LRUCache<K,V> implements Cache<K,V>{
             Node<K,V> node = map.get(key);
             node.getNewEntry().setValue(value);
             list.moveToTop(node);
-            
     }
     
     

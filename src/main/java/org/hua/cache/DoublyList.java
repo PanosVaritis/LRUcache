@@ -233,4 +233,9 @@ public class DoublyList<K,V> implements ListInterface<K,V> {
         
     }
     
+   public void removeNode (Node<K,V> node){
+       
+   }
+     
+    
 }
