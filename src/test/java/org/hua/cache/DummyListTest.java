@@ -128,8 +128,55 @@ public class DummyListTest {
         listTest.dummyDropSpecific(node5);
         listTest.dummyDropSpecific(node3);
         assertEquals (0, listTest.size());
+        listTest.dummyAdd(node);
+        listTest.dummyAdd(node1);
+        listTest.dummyDropSpecific(node1);
+        assertEquals (1, listTest.size());
+        assertNull (listTest.dummySearch(node1));
+        
+        listTest.dummyAdd(node3);
+        listTest.dummyDropSpecific(node);
+        assertNull (listTest.dummySearch(node));
+        assertEquals(1, listTest.size());
+        listTest.dummyDropSpecific(node3);
+        assertEquals (0, listTest.size());
     }
 
+    
+    /**
+     * The purpose of the above tests is to study the behavior of the dummy list when we insert nodes,
+     * and when we remove specific nodes. Those two operations will be done in LFU strategy and especially,
+     * during the frequency update of a node. Then the appropriate node will be selected and will be removed
+     * from the dummy List, and afterwards will be added to a dummy list with frequency higher by 1.
+     * We make several dummyDropSpecific (node), in order to simulate all the possible positions that a node
+     * might be in the dummy list. (First, Last, The only one, or in the middle)
+     */
+    
+    
+    @Test 
+    public void test3 (){
+        
+        DummyList <Integer, Integer> dummyList = new DummyList<>();
+        
+        
+        Node <Integer, Integer> node1 = new Node<>(1, 11);
+        Node <Integer, Integer> node2 = new Node<>(2, 12);
+        Node <Integer, Integer> node3 = new Node<>(3, 13);
+        
+        assertEquals(0, dummyList.size());
+        dummyList.dummyAdd(node1);
+        dummyList.dummyAdd(node2);
+        dummyList.dummyAdd(node3);
+        assertEquals(3, dummyList.size());
+        
+        /**
+         * The current form of the dummy list here is: from head to tail node3 -> node2 -> node1, 
+         * since the dummyAdd method adds each node at the head of the list similar to a stack. Also the, 
+         * removal of the nodes is made through the head of the list, again working as stack. Bellow we will,
+         * drop some nodes and and with the help of the assertions we will see the expected results
+         */
+        
+    }
 
     
     
