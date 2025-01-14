@@ -176,6 +176,18 @@ public class DummyListTest {
          * drop some nodes and and with the help of the assertions we will see the expected results
          */
         
+        dummyList.dummyDrop();
+        assertEquals(2, dummyList.size());
+        assertNull(dummyList.dummySearch(node3));
+        
+        dummyList.dummyDrop();
+        assertEquals(1, dummyList.size());
+        assertNull (dummyList.dummySearch(node2));
+        
+        dummyList.dummyDrop();
+        assertEquals(0, dummyList.size());
+                
+        
     }
 
     

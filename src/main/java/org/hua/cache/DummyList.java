@@ -48,29 +48,13 @@ public class DummyList <K,V>{
           this.dummyHead = null;
           this.dummyTail = null;
       }else {
-          dummyHead = toBeDropped.getNext();
+          dummyHead = toBeDropped.getDummyNext();
           dummyHead.setDummyPrev(null);
           toBeDropped.setDummyNext(null);
       }  
         
       this.size--;
       return toBeDropped; 
-      
-//      
-//
-//        //Must be carefful with the null pointer exception
-//        Node<K,V> tempo = head;
-//            
-//        if (head == tail){
-//            this.head = null;
-//            this.tail = null;
-//        }else {
-//            head = tempo.getNext();
-//            head.setPrev(null);
-//            tempo.setNext(null);
-//        }
-//        this.size--;
-//        return tempo;
     }
     
     public void dummyDropSpecific (Node<K,V> node){
