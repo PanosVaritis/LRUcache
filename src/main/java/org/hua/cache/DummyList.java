@@ -1,7 +1,8 @@
 package org.hua.cache;
 
+import java.util.NoSuchElementException;
+
 /**
- *
  * @author panos
  * @param <K>
  * @param <V>
@@ -10,30 +11,101 @@ package org.hua.cache;
 
 public class DummyList <K,V>{
     
-    private Node<K,V> dummyNext;
+    private Node<K,V> dummyHead;
     
-    private Node<K,V> dummyPrev;
+    private Node<K,V> dummyTail;
     
     private int size;
     
     public  DummyList (){
-        this.dummyNext = null;
-        this.dummyPrev = null;
+        this.dummyHead = null;
+        this.dummyTail = null;
         this.size = 0;
     }
     
     
     public void dummyAdd (Node<K,V> node){
         
+        if (isEmpty()){
+            this.dummyHead = node;
+            this.dummyTail = node;
+        }else {
+            node.setDummyNext(this.dummyHead);
+            dummyHead.setDummyPrev(node);
+            this.dummyHead = node;
+        }
+        this.size++;
     }
     
     public Node<K,V> dummyDrop (){
         
-      return null; 
+      if (isEmpty())
+          throw new NoSuchElementException ("The dummy list is empty. Cannot remove from empty dummy list.....");
+      
+      Node<K,V> toBeDropped  = this.dummyHead;
+      
+      if (dummyHead == dummyTail){
+          this.dummyHead = null;
+          this.dummyTail = null;
+      }else {
+          dummyHead = toBeDropped.getNext();
+          dummyHead.setDummyPrev(null);
+          toBeDropped.setDummyNext(null);
+      }  
+        
+      this.size--;
+      return toBeDropped; 
     }
     
     public void dummyDropSpecific (Node<K,V> node){
         
+        //We check if the dummy list is empty
+        if (isEmpty())
+            throw new NoSuchElementException ("The dummy list is empty!!! Cannot drop specific from dummy list.....");
+        
+        //We check if the dummy list has only one node inside (Size == 1)
+        if (dummyHead == dummyTail){
+            this.dummyHead = null;
+            this.dummyTail = null;
+            node.setDummyNext(null);
+            node.setDummyPrev(null);
+            this.size --;
+            return ;
+        }
+
+        
+        //We check if the node that we are trying to remove is the first on the dummy list
+        if (node.getDummyPrev() == null){
+            dummyHead = dummyHead.getDummyNext();
+            dummyHead.setDummyPrev(null);
+            node.setDummyNext(null);
+            this.size--;
+            return ;
+        }
+        
+        //We check if the node that we are trying to remove is the last on the list
+        if (node.getDummyNext() == null){
+            dummyTail = dummyTail.getDummyPrev();
+            dummyTail.setDummyNext(null);
+            node.setDummyPrev(null);
+            this.size--;
+            return ;
+        }
+        
+        
+        //If we reach this area, this means that the node we are trying to remove is somewehre inside the list
+        Node<K,V> back = node.getDummyPrev();
+        Node<K,V> front = node.getDummyNext();
+        back.setDummyNext(front);
+        front.setDummyPrev(back);
+        node.setDummyNext(null);
+        node.setDummyPrev(null);
+        this.size--;
+        
+    }
+    
+    public boolean isEmpty (){
+        return this.size == 0;
     }
     
     
