@@ -42,7 +42,7 @@ public class DummyList <K,V>{
       if (isEmpty())
           throw new NoSuchElementException ("The dummy list is empty. Cannot remove from empty dummy list.....");
       
-      Node<K,V> toBeDropped  = this.dummyHead;
+      Node<K,V> toBeDropped  = dummyHead;
       
       if (dummyHead == dummyTail){
           this.dummyHead = null;
@@ -55,6 +55,22 @@ public class DummyList <K,V>{
         
       this.size--;
       return toBeDropped; 
+      
+//      
+//
+//        //Must be carefful with the null pointer exception
+//        Node<K,V> tempo = head;
+//            
+//        if (head == tail){
+//            this.head = null;
+//            this.tail = null;
+//        }else {
+//            head = tempo.getNext();
+//            head.setPrev(null);
+//            tempo.setNext(null);
+//        }
+//        this.size--;
+//        return tempo;
     }
     
     public void dummyDropSpecific (Node<K,V> node){
@@ -107,6 +123,30 @@ public class DummyList <K,V>{
     public boolean isEmpty (){
         return this.size == 0;
     }
+    
+    
+    public int size (){
+        return this.size;
+    }
+    
+    //For test purposes!
+    public K dummySearch (Node <K,V> dummyNode){
+        
+        if (isEmpty())
+            throw new NoSuchElementException ("Dummy list is empty");
+        
+        Node<K,V> current = dummyHead;
+        
+        while (current != null){
+            if (current == dummyNode){
+                return dummyNode.getNewEntry().getKey();
+            }
+            current = current.getDummyNext();
+        }
+        
+        return null;
+    }
+    
     
     
 }
