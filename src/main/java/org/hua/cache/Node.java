@@ -15,11 +15,17 @@ public class Node <K,V>{
         
     private Node<K,V> prev;
 
+    private Node<K,V> dummyNext;
+    
+    private Node<K,V> dummyPrev;
+    
     public Node (K key, V value){
             
         newEntry = new Entry<>(key, value);
         this.next = null;
         this.prev = null;
+        this.dummyNext = null;
+        this.dummyPrev = null;
           
     }
 
@@ -46,6 +52,24 @@ public class Node <K,V>{
     public void setPrev(Node<K, V> prev) {
         this.prev = prev;
     }
+
+    public Node<K, V> getDummyNext() {
+        return dummyNext;
+    }
+
+    public void setDummyNext(Node<K, V> dummyNext) {
+        this.dummyNext = dummyNext;
+    }
+
+    public Node<K, V> getDummyPrev() {
+        return dummyPrev;
+    }
+
+    public void setDummyPrev(Node<K, V> dummyPrev) {
+        this.dummyPrev = dummyPrev;
+    }
+    
+    
     
     
     

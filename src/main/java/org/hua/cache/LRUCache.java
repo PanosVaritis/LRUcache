@@ -2,7 +2,6 @@
 package org.hua.cache;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -36,7 +35,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
     //Variable used to count the misses. Initialized each time to zero
     private int misses;
     
-    private TreeMap<Integer, HashMap<Node<K,V>,Void>> treeMap;
+    private TreeMap<Integer, DummyList<K,V>> treeMap;
     
     public LRUCache (int totalSize, CacheReplacementPolicy strategy){
         
@@ -155,30 +154,16 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private void removeBasedOnLfu(){
         
-        //We use the first entry method, that return the first enrty of the the map. The entry is the key and the value
-        Map.Entry<Integer, HashMap<Node<K,V>, Void>> entry = treeMap.firstEntry();
+        Map.Entry<Integer, DummyList<K,V>> entry = treeMap.firstEntry();
+        
+        DummyList<K,V> nodesWithSameFrequency = entry.getValue();
+        
+        Node<K,V> dummy = nodesWithSameFrequency.dummyDrop();
+        
+        list.removeNode(dummy);
+        
+        map.remove(dummy.getNewEntry().getKey());
 
-        //After we get the entry we take the value of the entry which is the node list
-        HashMap<Node<K,V>, Void> nodesWithSameFrequency = entry.getValue();
-
-        //We choose randomly from the set if nodes with the same frequency, a node to remove
-        Iterator<Node<K,V>> iterator = nodesWithSameFrequency.keySet().iterator();
-
-        Node<K,V> toBeRemoved = null;
-
-        //Here we select the node and remove it from the set of nodes
-        if (iterator.hasNext()){
-            toBeRemoved = iterator.next();
-            nodesWithSameFrequency.remove(toBeRemoved);
-        }
-
-        //Besides the removal of the node from the tree map, we must also remove it from the cache and the hash table
-        if (!(toBeRemoved == null)){
-            list.removeNode(toBeRemoved);
-            map.remove(toBeRemoved.getNewEntry().getKey());
-        }
-
-        //We decrease the size of the cache
         this.actualSize--;  
        
     }
@@ -186,15 +171,13 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private void updateFrequency (Node<K,V> node){
         
-        //We have the old frequency stored locally in case we need it
         Integer oldFrequency = node.getNewEntry().getCounter();
         
-        //We use the method and we increase the frequency of the node
         node.getNewEntry().increaseCounter();
        
-        HashMap<Node<K,V>, Void> frequencyMap = treeMap.get(oldFrequency);
+        DummyList<K,V> frequency = treeMap.get(oldFrequency);
         
-        frequencyMap.remove(node);
+        frequency.dummyDropSpecific(node);
         
         addToTreeLinkedList(node);
 
@@ -210,11 +193,11 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         if (!(treeMap.containsKey(1))){
             
-            treeMap.put(1, new HashMap<>());
+            treeMap.put(1, new DummyList<>());
             
         }
         
-        treeMap.get(1).put(node, null);
+        treeMap.get(1).dummyAdd(node);
         this.actualSize++;
     }
     
@@ -249,11 +232,11 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         if (!(treeMap.containsKey(node.getNewEntry().getCounter()))){
             
-            treeMap.put(node.getNewEntry().getCounter(), new HashMap<>());
+            treeMap.put(node.getNewEntry().getCounter(),new DummyList<>());
             
         }
         
-        treeMap.get(node.getNewEntry().getCounter()).put(node, null);
+        treeMap.get(node.getNewEntry().getCounter()).dummyAdd(node);
     }
        
 }
