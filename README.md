@@ -3,7 +3,7 @@
 This is a simple app for a cache. The user can select from the different available strategies and execute the program
 
 # Reuirements
-   ```bash	
+   ```bash
    1.Maven 
    2.JDK version 8 or higher
    ```

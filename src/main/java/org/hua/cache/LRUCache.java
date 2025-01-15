@@ -26,7 +26,16 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private int totalSize;
     
-    public LRUCache (int totalSize){
+    private CacheReplacementPolicy strategy;
+    
+    //Variable used to count the hits. Initialized each time to zero
+    private int hits;
+    
+    //Variable used to count the misses. Initialized each time to zero
+    private int misses;
+    
+    
+    public LRUCache (int totalSize, CacheReplacementPolicy strategy){
         
         if (totalSize <= 0)
             throw new IllegalArgumentException ("The size of the cache cannot be negative!!!");
@@ -38,18 +47,29 @@ public class LRUCache<K,V> implements Cache<K,V>{
         this.list = new DoublyList<>();
         
         this.map = new HashMap();
+    
+        this.strategy = strategy;
+    
+        this.hits = 0;
+        
+        this.misses = 0;
+        
     }
     
 
     @Override
     public V get(K key) {
         
-        if (!map.containsKey(key))
+        if (!map.containsKey(key)){
+            this.misses++;
             return null;
+        }
         
         Node<K,V> node = map.get(key);
         
         list.moveToTop(node);
+        
+        this.hits++;
         
         return node.getNewEntry().getValue();
     }
@@ -72,15 +92,47 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         if (actualSize >= totalSize){
             
-            Node<K,V> node = list.removeFirst();
-            map.remove(node.getNewEntry().getKey());
-            actualSize--;
+            if(this.strategy == CacheReplacementPolicy.LRU){
+                removeBasedOnLru();
+            }else if (this.strategy == CacheReplacementPolicy.MRU){
+                removeBasedOnMru();
+            }
         }
         
         
         list.addLast(key, value);
         Node<K,V> newNode = list.getLast();
         map.put(key, newNode);
-        actualSize++;
+        this.actualSize++;
     }
+    
+    
+    @Override 
+    public int getHitCount (){
+       return this.hits;
+    }
+    
+    
+    @Override 
+    public int getMissCount(){
+        return this.misses;
+    }
+    
+    
+    private void removeBasedOnLru(){
+        
+        //We remove the first node of the list. Lest recent used item from the cache
+        Node<K,V> node = list.removeFirst();
+        map.remove(node.getNewEntry().getKey());
+        this.actualSize--;
+    }
+    
+    private void removeBasedOnMru(){
+        
+        //We remove the last node of the list. Most recent used item from the cache
+        Node<K,V> node = list.removeLast();
+        map.remove(node.getNewEntry().getKey());
+        this.actualSize--;
+    }
+    
 }

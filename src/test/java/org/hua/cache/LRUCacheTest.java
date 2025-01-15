@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  *
  * @author panos
+ * 
+ * Until test with number 13 we examine the LRU strategy. From test 13 and down we examine the MRU strategy
  */
 public class LRUCacheTest {
     
@@ -15,7 +17,7 @@ public class LRUCacheTest {
     
     @BeforeEach
     public void setUp(){
-        cache = new LRUCache<>(3);
+        cache = new LRUCache<>(3, CacheReplacementPolicy.LRU);
     }
     
     
@@ -132,7 +134,7 @@ public class LRUCacheTest {
     public void cacheTest6(){
         
         int count = 100000;
-        Cache<Integer, String> cache = new LRUCache<>(count);
+        Cache<Integer, String> cache = new LRUCache<>(count, CacheReplacementPolicy.LRU);
         
         for (int i = 0;i < count;i++){
             cache.put(i, "Text "+i);
@@ -174,7 +176,7 @@ public class LRUCacheTest {
         
         int count = 5000000;
         
-        Cache<Integer, String> myCache = new LRUCache<>(count);
+        Cache<Integer, String> myCache = new LRUCache<>(count, CacheReplacementPolicy.LRU);
         
         for (int i = 0;i < count;i++){
             myCache.put(i, "Number "+i);
@@ -189,7 +191,7 @@ public class LRUCacheTest {
     public void cacheTest9(){
         
         int count = 10000;
-        Cache<Integer, Integer> myCache = new LRUCache<>(count);
+        Cache<Integer, Integer> myCache = new LRUCache<>(count, CacheReplacementPolicy.LRU);
         
         for (int i = 0;i < count;i++){
             myCache.put(i, i*10);
@@ -216,51 +218,188 @@ public class LRUCacheTest {
     public void cacheTest10(){
         
         
-        Cache<String, String> cache = new LRUCache<>(3);
+        Cache<String, String> myCache = new LRUCache<>(3, CacheReplacementPolicy.LRU);
         
-        assertNull (cache.get("Varitis"));
-        assertNull (cache.get("Rerdios"));
-        assertNull (cache.get("Haralabidis"));
+        assertNull (myCache.get("Varitis"));
+        assertNull (myCache.get("Rerdios"));
+        assertNull (myCache.get("Haralabidis"));
         
-        cache.put("Varitis", "Data Structures");
-        cache.put("Perdios", "Distributed Systems");
-        cache.put("Haralabidis", "Object Oriented");
+        myCache.put("Varitis", "Data Structures");
+        myCache.put("Perdios", "Distributed Systems");
+        myCache.put("Haralabidis", "Object Oriented");
         
-        assertEquals ("Data Structures", cache.get("Varitis"));
-        assertEquals ("Distributed Systems", cache.get("Perdios"));
-        assertEquals ("Object Oriented", cache.get("Haralabidis"));
+        assertEquals ("Data Structures", myCache.get("Varitis"));
+        assertEquals ("Distributed Systems", myCache.get("Perdios"));
+        assertEquals ("Object Oriented", myCache.get("Haralabidis"));
         
-        cache.put ("Varitis", "Distributed Systems");
-        cache.put("Bardaki", "Software Eng");
-        assertNull(cache.get("Perdios"));
+        myCache.put ("Varitis", "Distributed Systems");
+        myCache.put("Bardaki", "Software Eng");
+        assertNull(myCache.get("Perdios"));
         
     }
     
     public void cacheTest11(){
         
-        Cache<String, String> cache = new LRUCache<>(3);
+        Cache<String, String> myCache = new LRUCache<>(3, CacheReplacementPolicy.LRU);
         
         for (int i = 0;i < 100000;i++)
-            cache.put ("Panos", "Varitis"+i);
+            myCache.put ("Panos", "Varitis"+i);
         
-        assertEquals ("Varitis"+99999, cache.get("Panos"));
+        assertEquals ("Varitis"+99999, myCache.get("Panos"));
     }
     
     @Test
     public void cacheTest12(){
         
         int count = 100000;
-        Cache<String, String> cache = new LRUCache<>(count);
+        Cache<String, String> myCache = new LRUCache<>(count, CacheReplacementPolicy.LRU);
         
         
         for (int i = 0;i < count;i++)
-            cache.put ("it2021"+i,"Student"+i);
+            myCache.put ("it2021"+i,"Student"+i);
         
         for (int i = 0;i < count;i++)
-            assertEquals ("Student"+i, cache.get("it2021"+i));
+            assertEquals ("Student"+i, myCache.get("it2021"+i));
         
         
-        cache.put("it2021"+count, "Student"+count);
-        assertNull (cache.get("it2021"+0));
+        myCache.put("it2021"+count, "Student"+count);
+        assertNull (myCache.get("it2021"+0));
+    }
+    
+    //From this test and after we examine the MRU changing policy
+    @Test
+    public void cacheTestMru(){
+        Cache<Integer,String> myCache = new LRUCache<>(3, CacheReplacementPolicy.MRU);
+        
+        myCache.put(1, "One");
+        myCache.put(2, "Two");
+        myCache.put(3, "Three");
+
+        assertEquals("One", myCache.get(1));
+        assertEquals("Two", myCache.get(2));
+        assertEquals("Three", myCache.get(3));
+        
+        myCache.put(4, "Four");
+                
+        assertNull(myCache.get(3));
+        assertEquals("Two", myCache.get(2));
+        assertEquals("One", myCache.get(1));
+        assertEquals("Four", myCache.get(4));
+    }
+    
+    
+    @Test
+    public void cacheTestMru1(){
+        Cache<Integer, String> myCache = new LRUCache<>(3, CacheReplacementPolicy.MRU);
+        
+        
+        myCache.put(1, "Panos");
+        myCache.put(1, "Dimitris");
+        myCache.put(1, "Nikos");
+        
+        myCache.put(2, "Panos");
+        
+        myCache.put(3, "Manolis");
+        assertEquals ("Nikos", myCache.get(1));
+        
+        myCache.put(3, "Marios");
+        myCache.put(4, "Dimitris");
+        assertNull (myCache.get(3));
+        myCache.put(9, "Something");
+        assertNull (myCache.get(4));
+    }
+    
+    @Test
+    public void cacheTestMru2(){
+        Cache<Integer, String> myCache = new LRUCache<>(3, CacheReplacementPolicy.MRU);
+        
+        
+        myCache.put(1, "Harokopeio");
+        myCache.put(2, "Ekpa");
+        myCache.put(3, "Assoe");
+        myCache.put(4, "Har");
+        myCache.put(5, "Har1");
+        myCache.put(6, "Har2");
+        myCache.put(7, "Har3");
+        myCache.put(8, "Har4");
+        myCache.put(9, "Har5");
+        myCache.put(10, "Har6");
+        myCache.put(11, "Har7");
+        
+        for (int i = 3; i < 11;i++)
+            assertNull(myCache.get(i));
+        
+        assertEquals ("Harokopeio", myCache.get(1));
+        assertEquals ("Ekpa", myCache.get(2));
+        assertEquals ("Har7", myCache.get(11));
+    }
+
+    //This test does the same operations with the above. The only difference is in the policy
+    @Test
+    public void cacheTestLruSpecial(){
+        Cache<Integer, String> myCache = new LRUCache<>(3, CacheReplacementPolicy.LRU);
+   
+        myCache.put(1, "Harokopeio");
+        myCache.put(2, "Ekpa");
+        myCache.put(3, "Assoe");
+        myCache.put(4, "Har");
+        myCache.put(5, "Har1");
+        myCache.put(6, "Har2");
+        myCache.put(7, "Har3");
+        myCache.put(8, "Har4");
+        myCache.put(9, "Har5");
+        myCache.put(10, "Har6");
+        myCache.put(11, "Har7");
+        
+        for (int i = 1;i < 9;i++)
+            assertNull(myCache.get(i));
+        
+        assertEquals ("Har5", myCache.get(9));
+        assertEquals ("Har6", myCache.get(10));
+        assertEquals ("Har7", myCache.get(11));
+    }
+    
+    @Test
+    public void cacheTestMru3(){
+        Integer count = 1000;
+        Cache<Integer, Integer> myCache = new LRUCache<>(count, CacheReplacementPolicy.MRU);
+        
+        for (int i = 0;i < count;i++){
+            myCache.put(i, i);
+            assertEquals(i, myCache.get(i));
+        }
+        
+        for (int i = count;i < 2*count;i++)
+            myCache.put(i, i);
+        
+        for (int i = 0;i < count-1;i++)
+            assertEquals(i, myCache.get(i));
+        
+        assertEquals (2*count - 1, myCache.get(2*count - 1));
+        
+        
+        for (int i = count; i < 2*count -1;i++)
+            assertNull(myCache.get(i));
+    }
+    
+    
+    @Test
+    public void cacheTestLruSpecial2(){
+        Integer count = 1000;
+        Cache<Integer, Integer> myCache = new LRUCache<>(count, CacheReplacementPolicy.LRU);
+        
+        for(int i = 0;i < count;i++){
+            myCache.put(i, i);
+            assertEquals(i, myCache.get(i));
+        }
+        
+        for (int i = count;i < 2*count;i++)
+            myCache.put(i, i);
+        
+        for (int i = 0;i < count;i++)
+            assertNull(myCache.get(i));
+        
+        for (int i = count; i < 2*count;i++)
+            assertEquals (i, myCache.get(i));
     }
 }

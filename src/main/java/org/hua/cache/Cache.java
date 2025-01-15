@@ -27,4 +27,18 @@ public interface Cache <K, V>{
      */
     void put (K key, V value);
     
+    /**
+     * When this method is called will return the number of hits in the cache so far
+     * It doesn't make any calculation. Just returns the value. 
+     * @return number of times the item was found
+     */
+    int getHitCount();
+    
+    /**
+     * When this method is called will return the number of misses in the cache so far
+     * It doesn't make any calculation. Just returns the value. 
+     * @return number of times the item was not found
+     */
+    int getMissCount();
+    
 }
