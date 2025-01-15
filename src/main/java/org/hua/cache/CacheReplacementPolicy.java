@@ -8,7 +8,8 @@ package org.hua.cache;
 public enum CacheReplacementPolicy {
     
     LRU("Least Recent Used"),
-    MRU("Most Recent Used");
+    MRU("Most Recent Used"),
+    LFU("Least Frequently Used");
     
     private final String description;
     

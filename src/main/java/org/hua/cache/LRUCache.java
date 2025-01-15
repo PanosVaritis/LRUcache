@@ -2,7 +2,8 @@
 package org.hua.cache;
 
 import java.util.HashMap;
-
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * This is the cache implementation
@@ -34,6 +35,7 @@ public class LRUCache<K,V> implements Cache<K,V>{
     //Variable used to count the misses. Initialized each time to zero
     private int misses;
     
+    private TreeMap<Integer, DummyList<K,V>> treeMap;
     
     public LRUCache (int totalSize, CacheReplacementPolicy strategy){
         
@@ -54,6 +56,9 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         this.misses = 0;
         
+        if (this.strategy == CacheReplacementPolicy.LFU)
+            treeMap = new TreeMap<>();
+        
     }
     
 
@@ -71,6 +76,10 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         this.hits++;
         
+        if (this.strategy == CacheReplacementPolicy.LFU)
+            updateFrequency(node);
+        
+        
         return node.getNewEntry().getValue();
     }
 
@@ -81,13 +90,17 @@ public class LRUCache<K,V> implements Cache<K,V>{
         
         if (map.containsKey(key)){
             
-            Node<K,V> node = map.get(key);
-
-            node.getNewEntry().setValue(value);
-            
-            list.moveToTop(node);
-            
-            return;
+            if (this.strategy == CacheReplacementPolicy.LFU){
+                
+                duplicateWithLFU(key, value);
+                return ;
+                
+            }else {
+                
+                duplicateWithOthers(key, value);
+                return ;
+                
+            }
         }
         
         if (actualSize >= totalSize){
@@ -96,14 +109,17 @@ public class LRUCache<K,V> implements Cache<K,V>{
                 removeBasedOnLru();
             }else if (this.strategy == CacheReplacementPolicy.MRU){
                 removeBasedOnMru();
+            }else if (this.strategy == CacheReplacementPolicy.LFU){
+                removeBasedOnLfu();
             }
         }
         
         
-        list.addLast(key, value);
-        Node<K,V> newNode = list.getLast();
-        map.put(key, newNode);
-        this.actualSize++;
+        if (this.strategy == CacheReplacementPolicy.LFU){
+            addBasedOnLFU(key, value);
+        }else {
+            addBasedOnTheOtherStrategies(key, value);
+        }
     }
     
     
@@ -135,4 +151,92 @@ public class LRUCache<K,V> implements Cache<K,V>{
         this.actualSize--;
     }
     
+    
+    private void removeBasedOnLfu(){
+        
+        Map.Entry<Integer, DummyList<K,V>> entry = treeMap.firstEntry();
+        
+        DummyList<K,V> nodesWithSameFrequency = entry.getValue();
+        
+        Node<K,V> dummy = nodesWithSameFrequency.dummyDrop();
+        
+        list.removeNode(dummy);
+        
+        map.remove(dummy.getNewEntry().getKey());
+
+        this.actualSize--;  
+       
+    }
+    
+    
+    private void updateFrequency (Node<K,V> node){
+        
+        Integer oldFrequency = node.getNewEntry().getCounter();
+        
+        node.getNewEntry().increaseCounter();
+       
+        DummyList<K,V> frequency = treeMap.get(oldFrequency);
+        
+        frequency.dummyDropSpecific(node);
+        
+        addToTreeLinkedList(node);
+
+    }
+    
+    
+    
+    private void addBasedOnLFU(K key, V value){
+        
+        list.addLast(key, value);
+        Node<K,V> node = list.getLast();
+        map.put(key, node);
+        
+        if (!(treeMap.containsKey(1))){
+            
+            treeMap.put(1, new DummyList<>());
+            
+        }
+        
+        treeMap.get(1).dummyAdd(node);
+        this.actualSize++;
+    }
+    
+    
+    private void addBasedOnTheOtherStrategies(K key, V value){
+        
+            list.addLast(key, value);
+            Node<K,V> newNode = list.getLast();
+            map.put(key, newNode);
+            this.actualSize++;
+    }
+    
+    
+    private void duplicateWithLFU(K key, V value){
+        
+        Node<K,V> node = map.get(key);
+        node.getNewEntry().setValue(value);
+        list.moveToTop(node);
+        updateFrequency(node);
+    }
+    
+    private void duplicateWithOthers (K key, V value){
+                    
+            Node<K,V> node = map.get(key);
+            node.getNewEntry().setValue(value);
+            list.moveToTop(node);
+    }
+    
+    
+    private void addToTreeLinkedList (Node<K,V> node){
+        
+        
+        if (!(treeMap.containsKey(node.getNewEntry().getCounter()))){
+            
+            treeMap.put(node.getNewEntry().getCounter(),new DummyList<>());
+            
+        }
+        
+        treeMap.get(node.getNewEntry().getCounter()).dummyAdd(node);
+    }
+       
 }

@@ -85,4 +85,11 @@ public interface ListInterface<K,V> extends Iterable<Node<K,V>>{
      */
     Iterator<Node<K,V>> iterator();
 
+    /** 
+     * Additional method. Takes as parameter a node reference, and removes it from the list in O(1) complexity
+     * Specifically added in order to support the LFU method.
+     * @param node 
+     */
+    void removeNode(Node<K,V> node);
+    
 }

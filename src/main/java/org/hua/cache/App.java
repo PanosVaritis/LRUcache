@@ -24,6 +24,7 @@ public class App {
         System.out.println ("Welcome to the cache!!! Please select your strategy.");
         System.out.println ("1. LRU("+CacheReplacementPolicy.LRU+")");
         System.out.println ("2. MRU("+CacheReplacementPolicy.MRU+")");
+        System.out.println ("3. LFU("+CacheReplacementPolicy.LFU+")");
         System.out.print ("Insert your choice (MRU or LRU): ");
         String dec = scanner.nextLine();
         
@@ -31,9 +32,12 @@ public class App {
            cache = new LRUCache<>(count, CacheReplacementPolicy.LRU); 
         }else if (dec.trim().equalsIgnoreCase("MRU")){
             cache = new LRUCache<>(count, CacheReplacementPolicy.MRU);
+        }else if (dec.trim().equalsIgnoreCase("LFU")){
+            cache = new LRUCache<>(count, CacheReplacementPolicy.LFU);
         }else {
             throw new IllegalArgumentException ("The selected value is not correct");
         }
+
 
         for (int i = 0;i < operations;i++){
             
@@ -56,7 +60,6 @@ public class App {
                 cache.put(key, "Student"+key);
             }
         }
-        
         System.out.println ("Total operations: "+operations);
         System.out.println ("Cache hits: "+cache.getHitCount());
         System.out.println ("Cache misses: "+cache.getMissCount());
