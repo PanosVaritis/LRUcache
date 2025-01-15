@@ -173,7 +173,8 @@ public class DummyListTest {
          * The current form of the dummy list here is: from head to tail node3 -> node2 -> node1, 
          * since the dummyAdd method adds each node at the head of the list similar to a stack. Also the, 
          * removal of the nodes is made through the head of the list, again working as stack. Bellow we will,
-         * drop some nodes and and with the help of the assertions we will see the expected results
+         * drop some nodes and and with the help of the assertions we will see the expected results.
+         * After the dummy list is empty if we try to search for a node we will get an exception
          */
         
         dummyList.dummyDrop();
@@ -189,9 +190,4 @@ public class DummyListTest {
                 
         
     }
-
-    
-    
-    
-    
 }

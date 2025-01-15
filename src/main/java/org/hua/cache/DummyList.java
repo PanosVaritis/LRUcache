@@ -104,16 +104,17 @@ public class DummyList <K,V>{
         
     }
     
+    //For test purposes!!!
     public boolean isEmpty (){
         return this.size == 0;
     }
     
-    
+    //For test purposes!!!
     public int size (){
         return this.size;
     }
     
-    //For test purposes!
+    //For test purposes!!!!
     public K dummySearch (Node <K,V> dummyNode){
         
         if (isEmpty())
