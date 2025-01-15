@@ -154,18 +154,24 @@ public class LRUCache<K,V> implements Cache<K,V>{
     
     private void removeBasedOnLfu(){
         
-        Map.Entry<Integer, DummyList<K,V>> entry = treeMap.firstEntry();
-        
-        DummyList<K,V> nodesWithSameFrequency = entry.getValue();
-        
-        Node<K,V> dummy = nodesWithSameFrequency.dummyDrop();
-        
-        list.removeNode(dummy);
-        
-        map.remove(dummy.getNewEntry().getKey());
-
-        this.actualSize--;  
-       
+        for (Map.Entry<Integer, DummyList<K,V>> entry : treeMap.entrySet()){
+            
+            Integer key = entry.getKey();
+            DummyList<K,V> dummyList = entry.getValue();
+            
+            if (!dummyList.isEmpty()){
+                
+                Node<K,V> dummy = dummyList.dummyDrop();
+                
+                list.removeNode(dummy);
+                
+                map.remove(dummy.getNewEntry().getKey());
+                
+                this.actualSize--;
+                
+                break;
+            }
+        }
     }
     
     
