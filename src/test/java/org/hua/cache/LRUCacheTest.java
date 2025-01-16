@@ -438,5 +438,50 @@ public class LRUCacheTest {
         assertNull(myCache.get(3));
     }
     
+    
+    @Test
+    public void cacheTestLfu2(){
+        
+        Cache <Integer, String> smallCache = new LRUCache<>(5,CacheReplacementPolicy.LFU);
+        
+        
+        /**
+         * Here we create a five element cache and fill it up. After the cache is full we will try to insert more elements,
+         * and see the behavior. Since we make no get to any element, we expect to see nodes dropping from the tail, and i will,
+         * the reason. Since all the elements will have the same frequency, they will be on the same list. Each time the element,
+         * is added in the top of the list, and removed from the top of the list, just like a stack. So each time the last in will
+         * be the last out. For example in our situation after the cache is full, and all have the same frequency, if we 
+         * make 100 new put, each time the last put will be dropped.
+         */
+        
+        /**
+         * Here all the objects have their frequency counter set to 1. In the list of objects with the
+         * same frequency, first is the object with key 5, so if we try to add new objects this one will be dropped
+         */
+        smallCache.put(1, "Panos");
+        smallCache.put(2, "Dimitris");
+        smallCache.put(3, "Nikolas");
+        smallCache.put(4, "Marios");
+        smallCache.put(5, "Maria");
+        
+        smallCache.put(6, "Nikos");
+        assertNull(smallCache.get(5));
+        
+        /**
+         *  Again all the objects have their frequency counter set to 1. If we try to put 100 objects in the cache, 
+         * each time the one that is last added will be removed to free up space for the upcoming
+         */
+        
+        for (int i = 7;i < 100;i++){
+            smallCache.put(i, "Student"+i);
+            assertNull (smallCache.get(i-1));
+        }
+        
+        assertEquals ("Student"+99, smallCache.get(99));
+        
+        
+        
+        
+    }
 
 }
