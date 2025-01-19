@@ -433,7 +433,7 @@ public class LRUCacheTest {
         and in the tail the object with key 3. Bellow we will try to add a completely new key - value pair in the,
         cache. Normally the object with key number 3 should be removed since it has the lower frequency counter
         */
-        
+            
         myCache.put(4, "Thanasis");
         assertNull(myCache.get(3));
     }
