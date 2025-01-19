@@ -478,10 +478,27 @@ public class LRUCacheTest {
         }
         
         assertEquals ("Student"+99, smallCache.get(99));
+    }
+    
+    @Test
+    public void cacheTestLfu3 (){
+    
+    
+        Cache <Integer, Integer> littleCache = new LRUCache<>(5, CacheReplacementPolicy.LFU);
         
+        /**
+         * The test bellow also represents the way that the items with the same frequency are stored in the tree
+         * map. All the items have the same frequency counter, and they are stored in the first position of 
+         * the tree map. As already said the way that the items are inserted and exported from the list is through
+         * the top. This means that the size of the list below will never overcome number 5, and also each new
+         * element added will be immediately removed to free space for the next
+         */
         
+        for (int i = 0;i < 10000000;i++)
+            littleCache.put(i, i);
         
+        for (int i = 4;i < 9999999;i++)
+            assertNull (littleCache.get(i));
         
     }
-
 }
